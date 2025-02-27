@@ -16,11 +16,13 @@ public class GameModel {
     private final List<Entity> removeThese = new ArrayList<>();
     private final List<Entity> addThese = new ArrayList<>();
 
-    private ecs.Systems.TerrainRenderer terrainRenderer;
+
     private ecs.Systems.Collision sysCollision;
     private ecs.Systems.Movement sysMovement;
     private ecs.Systems.KeyboardInput sysKeyboardInput;
-    private ecs.Systems.SpaceShipRenderer spaceShipRenderer;
+    private ecs.Systems.SpaceShipRenderer sysSpaceShipRenderer;
+    private ecs.Systems.TerrainRenderer sysTerrainRenderer;
+    private ecs.Systems.Rotation sysRotation;
 
     public void initialize(Graphics2D graphics) {
 
@@ -29,8 +31,9 @@ public class GameModel {
         sysCollision = new Collision((Entity entity) -> {});
         sysMovement = new Movement();
         sysKeyboardInput = new KeyboardInput(graphics.getWindow());
-        terrainRenderer = new TerrainRenderer(graphics);
-        spaceShipRenderer = new SpaceShipRenderer(graphics);
+        sysTerrainRenderer = new TerrainRenderer(graphics);
+        sysSpaceShipRenderer = new SpaceShipRenderer(graphics);
+        sysRotation = new Rotation();
 
         initializeTerrain();
         initializaSpaceShip(texSpaceShip);
@@ -55,8 +58,9 @@ public class GameModel {
         addThese.clear();
 
         // Because ECS framework, rendering is now part of the update
-        terrainRenderer.update(elapsedTime); // Render the terrain
-        spaceShipRenderer.update(elapsedTime); // Render the spaceship
+        sysTerrainRenderer.update(elapsedTime); // Render the terrain
+        sysSpaceShipRenderer.update(elapsedTime); // Render the spaceship
+        sysRotation.update(elapsedTime);
     }
 
 
@@ -65,16 +69,18 @@ public class GameModel {
         sysKeyboardInput.add(entity);
         sysMovement.add(entity);
         sysCollision.add(entity);
-        terrainRenderer.add(entity);
-        spaceShipRenderer.add(entity);
+        sysTerrainRenderer.add(entity);
+        sysSpaceShipRenderer.add(entity);
+        sysRotation.add(entity);
     }
 
     private void removeEntity(Entity entity) {
         sysKeyboardInput.remove(entity.getId());
         sysMovement.remove(entity.getId());
         sysCollision.remove(entity.getId());
-        terrainRenderer.remove(entity.getId());
-        spaceShipRenderer.remove(entity.getId());
+        sysTerrainRenderer.remove(entity.getId());
+        sysSpaceShipRenderer.remove(entity.getId());
+        sysRotation.remove(entity.getId());
     }
 
 
@@ -93,11 +99,11 @@ public class GameModel {
 
         // Computer Elevation
         double  rg = rnd.nextGaussian(0, 1); // Random Gaussian number
-        double s = 0.3f; // Surface level factor
+        double s = 0.25f; // Surface level factor
         double r = s * rg * Math.abs((vec2.x - vec1.x));
 
         double y = ((vec2.y + vec1.y) / 2) + r;
-        y = y < 0 || y > 0.8 ? y * -1 : y; // Don't let elevation go beneath 0
+        y = y < 0 || y > 0.8 ? -y : y; // Don't let elevation go beneath 0
 
         return new Vector3f(tempX, (float)y, 0); // Return midpoint
     }
@@ -153,7 +159,7 @@ public class GameModel {
     }
 
     private void initializaSpaceShip(Texture texSpaceship){
-        var spaceship = SpaceShip.create(texSpaceship, 0.0f, 0.0f);
+        var spaceship = SpaceShip.create(texSpaceship, 0.0f, 0.0f, 0.0f);
         addEntity(spaceship);
     }
 
