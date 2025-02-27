@@ -1,5 +1,6 @@
 import ecs.Components.Points;
 import ecs.Entities.*;
+import  ecs.Entities.SpaceShip;
 import ecs.Systems.*;
 import ecs.Systems.KeyboardInput;
 import edu.usu.graphics.*;
@@ -9,31 +10,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameModel {
-    private final int GRID_SIZE = 50;
-    private final int OBSTACLE_COUNT = 15;
 
-    private int FACTOR = 1;
     private int RUN_MIDPOINT_ALGORITHM_TIMES = 6;
 
     private final List<Entity> removeThese = new ArrayList<>();
     private final List<Entity> addThese = new ArrayList<>();
 
-    private ecs.Systems.Renderer sysRenderer;
     private ecs.Systems.TerrainRenderer terrainRenderer;
-
     private ecs.Systems.Collision sysCollision;
     private ecs.Systems.Movement sysMovement;
     private ecs.Systems.KeyboardInput sysKeyboardInput;
+    private ecs.Systems.SpaceShipRenderer spaceShipRenderer;
 
     public void initialize(Graphics2D graphics) {
 
-        // sysRenderer = new Renderer(graphics, GRID_SIZE);
+        var texSpaceShip = new Texture("resources/characters/spaceship.png");
+
         sysCollision = new Collision((Entity entity) -> {});
         sysMovement = new Movement();
         sysKeyboardInput = new KeyboardInput(graphics.getWindow());
         terrainRenderer = new TerrainRenderer(graphics);
+        spaceShipRenderer = new SpaceShipRenderer(graphics);
 
         initializeTerrain();
+        initializaSpaceShip(texSpaceShip);
 
     }
 
@@ -56,26 +56,25 @@ public class GameModel {
 
         // Because ECS framework, rendering is now part of the update
         terrainRenderer.update(elapsedTime); // Render the terrain
-        // sysRenderer.update(elapsedTime); // Render the system
+        spaceShipRenderer.update(elapsedTime); // Render the spaceship
     }
 
-//    private void addTerrainEntity(Entity entity){
-//        this.terrainRenderer.add(entity);
-//    }
+
 
     private void addEntity(Entity entity) {
         sysKeyboardInput.add(entity);
         sysMovement.add(entity);
         sysCollision.add(entity);
-        // sysRenderer.add(entity);
         terrainRenderer.add(entity);
+        spaceShipRenderer.add(entity);
     }
 
     private void removeEntity(Entity entity) {
         sysKeyboardInput.remove(entity.getId());
         sysMovement.remove(entity.getId());
         sysCollision.remove(entity.getId());
-        // sysRenderer.remove(entity.getId());
+        terrainRenderer.remove(entity.getId());
+        spaceShipRenderer.remove(entity.getId());
     }
 
 
@@ -140,8 +139,6 @@ public class GameModel {
 
     private void initializeTerrain(){ // Texture triangle
 
-        MyRandom rnd = new MyRandom();
-
         float y1 = 0.0f;
         float y2 = 0.0f;
 
@@ -153,6 +150,11 @@ public class GameModel {
         addEntity(terrain);
         generateTerrain(terrain);
 
+    }
+
+    private void initializaSpaceShip(Texture texSpaceship){
+        var spaceship = SpaceShip.create(texSpaceship, 0.0f, 0.0f);
+        addEntity(spaceship);
     }
 
 

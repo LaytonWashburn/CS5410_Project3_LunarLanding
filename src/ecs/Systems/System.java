@@ -3,6 +3,7 @@ package ecs.Systems;
 import ecs.Components.Component;
 import ecs.Entities.Entity;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,9 @@ public abstract class System {
      * returns true, otherwise false.
      */
     protected boolean isInterested(Entity entity) {
+        java.lang.System.out.println(Arrays.toString(componentTypes));
         for (var type : componentTypes) {
+            java.lang.System.out.println(type);
             if (!entity.contains(type)) {
                 return false;
             }
