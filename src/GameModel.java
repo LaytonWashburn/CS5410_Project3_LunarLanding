@@ -12,9 +12,8 @@ public class GameModel {
     private final int GRID_SIZE = 50;
     private final int OBSTACLE_COUNT = 15;
 
-    private float ELEVATION = 0.1f;
-    private int RUN_MIDPOINT_ALGORITHM_TIMES = 5;
-    // private ArrayList<Vector3f> points;
+    private int FACTOR = 1;
+    private int RUN_MIDPOINT_ALGORITHM_TIMES = 6;
 
     private final List<Entity> removeThese = new ArrayList<>();
     private final List<Entity> addThese = new ArrayList<>();
@@ -60,15 +59,16 @@ public class GameModel {
         // sysRenderer.update(elapsedTime); // Render the system
     }
 
-    private void addTerrainEntity(Entity entity){
-        this.terrainRenderer.add(entity);
-    }
+//    private void addTerrainEntity(Entity entity){
+//        this.terrainRenderer.add(entity);
+//    }
 
     private void addEntity(Entity entity) {
         sysKeyboardInput.add(entity);
         sysMovement.add(entity);
         sysCollision.add(entity);
         // sysRenderer.add(entity);
+        terrainRenderer.add(entity);
     }
 
     private void removeEntity(Entity entity) {
@@ -87,12 +87,20 @@ public class GameModel {
      */
     private Vector3f midpointAlgorithm(Vector3f vec1, Vector3f vec2){
 
-        float tempX = (vec1.x + vec2.x) / 2;
-        float tempY = (vec1.y + vec2.y) / 2;
-        tempY += ELEVATION;
-        ELEVATION *= -1;
+        MyRandom rnd = new MyRandom(); // Random number generator kind of
 
-        return new Vector3f(tempX, tempY, 0);
+        // Get the midpoint
+        float tempX = (vec1.x + vec2.x) / 2;
+
+        // Computer Elevation
+        double  rg = rnd.nextGaussian(0, 1); // Random Gaussian number
+        double s = 0.3f; // Surface level factor
+        double r = s * rg * Math.abs((vec2.x - vec1.x));
+
+        double y = ((vec2.y + vec1.y) / 2) + r;
+        y = y < 0 || y > 0.8 ? y * -1 : y; // Don't let elevation go beneath 0
+
+        return new Vector3f(tempX, (float)y, 0); // Return midpoint
     }
 
     /**
@@ -107,8 +115,11 @@ public class GameModel {
      * – Ensure safe zone is at least 15% away from the borders
      */
     private void generateTerrain(Entity terrain){
+
         var t =  terrain.get(Points.class);
+
         ArrayList<Vector3f> temp;
+
         for(int i = 0; i < RUN_MIDPOINT_ALGORITHM_TIMES; i++){
 
             temp = new ArrayList<>(); // Make temporary array list to replace points array list at end of each iteration
@@ -129,11 +140,17 @@ public class GameModel {
 
     private void initializeTerrain(){ // Texture triangle
 
-        Vector3f vec1 = new Vector3f(-1.0f, 0.0f, 0);;
-        Vector3f vec2 = new Vector3f(1.0f, 0.0f, 0);
+        MyRandom rnd = new MyRandom();
+
+        float y1 = 0.0f;
+        float y2 = 0.0f;
+
+        Vector3f vec1 = new Vector3f(-1.0f, y1, 0);;
+        Vector3f vec2 = new Vector3f(1.0f, y2, 0);
 
         var terrain = Terrain.create(vec1, vec2);
-        addTerrainEntity(terrain);
+
+        addEntity(terrain);
         generateTerrain(terrain);
 
     }
