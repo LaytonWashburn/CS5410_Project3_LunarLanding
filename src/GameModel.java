@@ -23,6 +23,7 @@ public class GameModel {
     private ecs.Systems.SpaceShipRenderer sysSpaceShipRenderer;
     private ecs.Systems.TerrainRenderer sysTerrainRenderer;
     private ecs.Systems.Rotation sysRotation;
+    private ecs.Systems.Gravity sysGravity;
 
     public void initialize(Graphics2D graphics) {
 
@@ -34,6 +35,7 @@ public class GameModel {
         sysTerrainRenderer = new TerrainRenderer(graphics);
         sysSpaceShipRenderer = new SpaceShipRenderer(graphics);
         sysRotation = new Rotation();
+        sysGravity = new Gravity();
 
         initializeTerrain();
         initializaSpaceShip(texSpaceShip);
@@ -61,6 +63,7 @@ public class GameModel {
         sysTerrainRenderer.update(elapsedTime); // Render the terrain
         sysSpaceShipRenderer.update(elapsedTime); // Render the spaceship
         sysRotation.update(elapsedTime);
+        sysGravity.update(elapsedTime);
     }
 
 
@@ -72,6 +75,7 @@ public class GameModel {
         sysTerrainRenderer.add(entity);
         sysSpaceShipRenderer.add(entity);
         sysRotation.add(entity);
+        sysGravity.add(entity);
     }
 
     private void removeEntity(Entity entity) {
@@ -81,6 +85,7 @@ public class GameModel {
         sysTerrainRenderer.remove(entity.getId());
         sysSpaceShipRenderer.remove(entity.getId());
         sysRotation.remove(entity.getId());
+        sysGravity.remove(entity.getId());
     }
 
 
@@ -159,10 +164,9 @@ public class GameModel {
     }
 
     private void initializaSpaceShip(Texture texSpaceship){
-        var spaceship = SpaceShip.create(texSpaceship, 0.0f, 0.0f, 0.0f);
+        var spaceship = SpaceShip.create(texSpaceship, 0.0f, -0.5f, (0.5f * (float)Math.PI));
         addEntity(spaceship);
     }
-
 
 
 }

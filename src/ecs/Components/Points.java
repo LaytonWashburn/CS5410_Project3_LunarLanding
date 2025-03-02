@@ -10,7 +10,7 @@ public class Points extends Component {
 
     public Points(Vector3f vec1, Vector3f vec2) {
         points = new ArrayList<>();
-        this.points.add(vec1);
+        this.points.add(vec1); // Not suppose to have logic in it
         this.points.add(vec2);
     }
 

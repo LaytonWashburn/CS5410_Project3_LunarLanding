@@ -1,22 +1,16 @@
 package ecs.Components;
 
+import ecs.Direction;
+
 public class Movable extends Component {
 
-    public enum Direction {
-        Stopped,
-        Up,
-        Down,
-        Left,
-        Right
-    }
 
-    public Direction facing;
-    public int segmentsToAdd = 0;
+    public Direction moving;
     public double moveInterval; // seconds
     public double elapsedInterval;
 
-    public Movable(Direction facing, double moveInterval) {
-        this.facing = facing;
+    public Movable(Direction moving, double moveInterval) {
+        this.moving = moving;
         this.moveInterval =moveInterval;
     }
 }

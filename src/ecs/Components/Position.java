@@ -1,22 +1,33 @@
 package ecs.Components;
 
+import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Position extends Component {
-    public List<Vector2i> segments = new ArrayList<>();
 
-    public Position(int x, int y) {
-        segments.add(new Vector2i(x, y));
+    public float posX;
+    public float posY;
+    public Vector2f vector;
+    public Position(float x, float y) {
+        this.posX = x;
+        this.posY = y;
+//        this.vector.x = x;
+//        this.vector.y = y;
+    }
+//    public void setPosition(Vector2f vec){
+//
+//    }
+
+    public float getPosX() {
+
+        return this.posX;
     }
 
-    public int getX() {
-        return segments.get(0).x;
-    }
+    public float getPosY() {
 
-    public int getY() {
-        return segments.get(0).y;
+        return this.posY;
     }
 }

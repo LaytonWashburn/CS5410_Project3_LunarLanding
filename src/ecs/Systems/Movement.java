@@ -1,6 +1,8 @@
 package ecs.Systems;
 
 import ecs.Components.Movable;
+import ecs.Direction;
+import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 /**
@@ -12,6 +14,23 @@ public class Movement extends System {
         super(ecs.Components.Movable.class, ecs.Components.Position.class);
     }
 
+
+    public static Vector2f translatePoint(Vector2f point, float angleRadians, float movementDistance) {
+        // Calculate the movement in the x direction using cosine of the angle
+        float dy = movementDistance * (float) Math.cos(angleRadians);
+
+        // Calculate the movement in the y direction using sine of the angle
+        // For top-left origin, positive sin means going down (increasing y), negative sin means going up (decreasing y)
+        float dx = movementDistance * (float) Math.sin(angleRadians);
+
+        // Add the calculated movement to the original point
+        float newX = point.x - dx;
+        float newY = point.y + dy;  // Subtracting for top-left coordinate system (moving "up" is decreasing y)
+
+        // Return the translated point
+        return new Vector2f(newX, newY);
+    }
+
     @Override
     public void update(double elapsedTime) {
         for (var entity : entities.values()) {
@@ -19,44 +38,28 @@ public class Movement extends System {
         }
     }
 
-    private void moveEntity(ecs.Entities.Entity entity, double elapsedTime) {
-        var movable = entity.get(ecs.Components.Movable.class);
-        movable.elapsedInterval += elapsedTime;
-        if (movable.elapsedInterval >= movable.moveInterval) {
-            movable.elapsedInterval -= movable.moveInterval;
-            switch (movable.facing) {
-                case Movable.Direction.Up:
-                    move(entity, 0, -1);
-                    break;
-                case Movable.Direction.Down:
-                    move(entity, 0, 1);
-                    break;
-                case Movable.Direction.Left:
-                    move(entity, -1, 0);
-                    break;
-                case Movable.Direction.Right:
-                    move(entity, 1, 0);
-                    break;
-            }
-        }
-    }
-
-    private void move(ecs.Entities.Entity entity, int xIncrement, int yIncrement) {
+    private void move(ecs.Entities.Entity entity, float move ) {
         var movable = entity.get(ecs.Components.Movable.class);
         var position = entity.get(ecs.Components.Position.class);
+        var rotatable = entity.get(ecs.Components.Rotatable.class);
 
-        // Remember current front position, so it can be added back in at the front
-        var front = position.segments.get(0);
-
-        // Remove the tail, but only if there aren't new segments to add
-        if (movable.segmentsToAdd == 0 && position.segments.size() > 0) {
-            position.segments.remove(position.segments.size() - 1);
-        } else {
-            movable.segmentsToAdd--;
-        }
-
-        // Update the front of the entity with the segment moving into the new spot
-        Vector2i newFront = new Vector2i(front.x + xIncrement, front.y + yIncrement);
-        position.segments.add(0, newFront);
+        var vec = translatePoint(new Vector2f(position.posX, position.posY),
+                                 rotatable.getRotation(),
+                                 -0.01f);
+        position.posX = vec.x;
+        position.posY = vec.y;
     }
+
+    private void moveEntity(ecs.Entities.Entity entity, double elapsedTime) {
+        var moveable = entity.get(ecs.Components.Movable.class);
+
+        switch (moveable.moving) {
+            case Direction.Up:
+                move(entity, (0.01f * (float)Math.PI));
+                break;
+
+        }
+    }
+
+
 }

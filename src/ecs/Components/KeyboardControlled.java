@@ -1,13 +1,13 @@
 package ecs.Components;
-
+import ecs.Direction;
 import java.util.HashMap;
 import java.util.Map;
 
 public class KeyboardControlled extends Component {
-    public Map<Integer, Rotatable.Direction> keys;
-    public Map<Rotatable.Direction, Integer> lookup;
+    public Map<Integer, Direction> keys;
+    public Map<Direction, Integer> lookup;
 
-    public KeyboardControlled(Map<Integer, Rotatable.Direction> keys) {
+    public KeyboardControlled(Map<Integer, Direction> keys) {
         this.keys = keys;
 
         // Build the action to key lookup based on the key to action inf
