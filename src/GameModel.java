@@ -6,6 +6,7 @@ import ecs.Systems.KeyboardInput;
 import edu.usu.graphics.*;
 import org.joml.Vector3f;
 
+import java.lang.System;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,29 +90,75 @@ public class GameModel {
     }
 
 
+
+//    private Vector3f midpointAlgorithm(Vector3f vec1, Vector3f vec2, int refinementLevel) {
+//        MyRandom rnd = new MyRandom(); // Random number generator
+//
+//        // Get the midpoint in the X direction
+//        float tempX = (vec1.x + vec2.x) / 2;
+//
+//        // Calculate surface roughness factor (s) based on distance and refinement level
+//        float distance = Math.abs(vec2.x - vec1.x);
+//        double s = 0.25f * Math.pow(0.75, refinementLevel); // Example: reduce s with each level of refinement
+//
+//        // Optionally, you can make s depend on distance as well
+//        // For example, the surface roughness could decrease as the distance shrinks:
+//        // s *= Math.log(distance + 1) / 10;
+//
+//        // Compute random Gaussian displacement
+//        double rg = rnd.nextGaussian(0, 1); // Random Gaussian number
+//        double r = s * rg * distance; // Surface roughness effect
+//
+//        // Compute midpoint elevation and adjust with r
+//        double y = ((vec2.y + vec1.y) / 2) + r;
+//
+//        // Ensure y stays within valid bounds (e.g., [0, 1])
+//        y = Math.max(0, Math.min(1, y));
+//
+//        // Return the midpoint with the adjusted elevation
+//        return new Vector3f(tempX, (float)y, 0);
+//    }
+
     /**
      *
      * @param vec1
      * @param vec2
      * @return
      */
-    private Vector3f midpointAlgorithm(Vector3f vec1, Vector3f vec2){
+    private Vector3f midpointAlgorithm(Vector3f vec1, Vector3f vec2, int iteration){
 
         MyRandom rnd = new MyRandom(); // Random number generator kind of
 
-        // Get the midpoint
-        float tempX = (vec1.x + vec2.x) / 2;
-
-        // Computer Elevation
-        double  rg = rnd.nextGaussian(0, 1); // Random Gaussian number
-        double s = 0.25f; // Surface level factor
+        // Computer the elevation
+        double rg = rnd.nextGaussian(0, 1); // Gaussian random number, mean of 0 and variance of 1
+        double s = 0.175 * iteration; // Change the value of s at each level of refinement
         double r = s * rg * Math.abs((vec2.x - vec1.x));
+        double y = ((vec1.y + vec2.y) * 0.5) + r; // New elevation
+        y = Math.max(0, y); // Don't let the elevation go below 0
 
-        double y = ((vec2.y + vec1.y) / 2) + r;
-        y = y < 0 || y > 0.8 ? -y : y; // Don't let elevation go beneath 0
-
-        return new Vector3f(tempX, (float)y, 0); // Return midpoint
+        double newX =  0.5 * (vec1.x + vec2.x);  // Find the new x coordinate
+        return new Vector3f((float)newX, (float)y, 0);
     }
+//    private Vector3f midpointAlgorithm(Vector3f vec1, Vector3f vec2, int refinementLevel){
+//
+//        MyRandom rnd = new MyRandom(); // Random number generator kind of
+//
+//        // Get the midpoint
+//        float tempX = (vec1.x + vec2.x) / 2;
+//
+//        // Computer Elevation
+//        double  rg = rnd.nextGaussian(0, 1); // Random Gaussian number
+//        double s = 0.25f; // Surface level factor
+//        // Example: Varying s based on distance or recursion depth
+//
+//        double r = s * rg * Math.abs((vec2.x - vec1.x));
+//
+//        double y = ((vec2.y + vec1.y) / 2) + r;
+//        // y = y < 0 || y > 0.8 ? -y : y; // Don't let elevation go beneath 0
+//        y = Math.max(0, Math.min(1, y)); // Ensure y is between 0 and 1
+//
+//        return new Vector3f(tempX, (float)y, 0); // Return midpoint
+//    }
 
     /**
      * Add the two endpoints; randomly choose their elevations
@@ -138,7 +185,7 @@ public class GameModel {
             for(int item = 0; item < t.getPoints().size() - 1; item++){
 
                 temp.add(t.getPoints().get(item));
-                Vector3f tempPoint = midpointAlgorithm(t.getPoints().get(item), t.getPoints().get(item+1));
+                Vector3f tempPoint = midpointAlgorithm(t.getPoints().get(item), t.getPoints().get(item+1), i);
                 temp.add(tempPoint);
 
             }
@@ -163,6 +210,8 @@ public class GameModel {
 
     }
 
+
+    // Initialize the Lunar Lander
     private void initializaSpaceShip(Texture texSpaceship){
         var spaceship = SpaceShip.create(texSpaceship, 0.0f, -0.5f, (0.5f * (float)Math.PI));
         addEntity(spaceship);
