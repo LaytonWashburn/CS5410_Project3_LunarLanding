@@ -14,12 +14,7 @@ public class Position extends Component {
     public Position(float x, float y) {
         this.posX = x;
         this.posY = y;
-//        this.vector.x = x;
-//        this.vector.y = y;
     }
-//    public void setPosition(Vector2f vec){
-//
-//    }
 
     public float getPosX() {
 

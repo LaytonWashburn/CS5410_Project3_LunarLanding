@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Got the ship movement in a rough working state.">
+    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Better terrain generator, still needs work.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ecs/Components/Points.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Components/Segments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ecs/Components/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Components/Position.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +137,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740881547601</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Better terrain generator, still needs work.">
+      <option name="closed" value="true" />
+      <created>1740939742807</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1740939742807</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -144,7 +154,8 @@
     <MESSAGE value="Spaceship and terrain rendering correctly." />
     <MESSAGE value="Got a rough version of rotation working. Need to start working on thrust." />
     <MESSAGE value="Got the ship movement in a rough working state." />
-    <option name="LAST_COMMIT_MESSAGE" value="Got the ship movement in a rough working state." />
+    <MESSAGE value="Better terrain generator, still needs work." />
+    <option name="LAST_COMMIT_MESSAGE" value="Better terrain generator, still needs work." />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

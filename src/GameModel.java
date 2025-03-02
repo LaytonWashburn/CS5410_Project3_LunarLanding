@@ -1,4 +1,4 @@
-import ecs.Components.Points;
+import ecs.Components.Segments;
 import ecs.Entities.*;
 import  ecs.Entities.SpaceShip;
 import ecs.Systems.*;
@@ -6,14 +6,19 @@ import ecs.Systems.KeyboardInput;
 import edu.usu.graphics.*;
 import org.joml.Vector3f;
 
-import java.lang.System;
 import java.util.ArrayList;
 import java.util.List;
-
+import ecs.Components.Segments.Segment;
 public class GameModel {
 
-    private int RUN_MIDPOINT_ALGORITHM_TIMES = 6;
 
+    public enum LEVEL{
+        ONE,
+        TWO
+    }
+
+    private int RUN_MIDPOINT_ALGORITHM_TIMES = 7;
+    private LEVEL gameLevel;
     private final List<Entity> removeThese = new ArrayList<>();
     private final List<Entity> addThese = new ArrayList<>();
 
@@ -30,6 +35,7 @@ public class GameModel {
 
         var texSpaceShip = new Texture("resources/characters/spaceship.png");
 
+        gameLevel = LEVEL.ONE; // Set the game level, by default make it level ONE
         sysCollision = new Collision((Entity entity) -> {});
         sysMovement = new Movement();
         sysKeyboardInput = new KeyboardInput(graphics.getWindow());
@@ -90,34 +96,22 @@ public class GameModel {
     }
 
 
+    /**
+     *
+     * @param vec1
+     * @param vec2
+     * @return
+     */
+    private double getRandomElevation(Vector3f vec1, Vector3f vec2){
+        MyRandom rnd = new MyRandom(); // Random number generator kind of
 
-//    private Vector3f midpointAlgorithm(Vector3f vec1, Vector3f vec2, int refinementLevel) {
-//        MyRandom rnd = new MyRandom(); // Random number generator
-//
-//        // Get the midpoint in the X direction
-//        float tempX = (vec1.x + vec2.x) / 2;
-//
-//        // Calculate surface roughness factor (s) based on distance and refinement level
-//        float distance = Math.abs(vec2.x - vec1.x);
-//        double s = 0.25f * Math.pow(0.75, refinementLevel); // Example: reduce s with each level of refinement
-//
-//        // Optionally, you can make s depend on distance as well
-//        // For example, the surface roughness could decrease as the distance shrinks:
-//        // s *= Math.log(distance + 1) / 10;
-//
-//        // Compute random Gaussian displacement
-//        double rg = rnd.nextGaussian(0, 1); // Random Gaussian number
-//        double r = s * rg * distance; // Surface roughness effect
-//
-//        // Compute midpoint elevation and adjust with r
-//        double y = ((vec2.y + vec1.y) / 2) + r;
-//
-//        // Ensure y stays within valid bounds (e.g., [0, 1])
-//        y = Math.max(0, Math.min(1, y));
-//
-//        // Return the midpoint with the adjusted elevation
-//        return new Vector3f(tempX, (float)y, 0);
-//    }
+        // Computer the elevation
+        double rg = rnd.nextGaussian(0, 1); // Gaussian random number, mean of 0 and variance of 1
+        double s = 0.25; // 0.175 * iteration; // Change the value of s at each level of refinement
+        double r = s * rg * Math.abs((vec2.x - vec1.x));
+        double y = ((vec1.y + vec2.y) * 0.5) + r; // New elevation
+        return Math.max(0, y); // Don't let the elevation go below 0
+    }
 
     /**
      *
@@ -126,39 +120,11 @@ public class GameModel {
      * @return
      */
     private Vector3f midpointAlgorithm(Vector3f vec1, Vector3f vec2, int iteration){
-
-        MyRandom rnd = new MyRandom(); // Random number generator kind of
-
-        // Computer the elevation
-        double rg = rnd.nextGaussian(0, 1); // Gaussian random number, mean of 0 and variance of 1
-        double s = 0.175 * iteration; // Change the value of s at each level of refinement
-        double r = s * rg * Math.abs((vec2.x - vec1.x));
-        double y = ((vec1.y + vec2.y) * 0.5) + r; // New elevation
-        y = Math.max(0, y); // Don't let the elevation go below 0
-
+        double y = getRandomElevation(vec1, vec2);
         double newX =  0.5 * (vec1.x + vec2.x);  // Find the new x coordinate
         return new Vector3f((float)newX, (float)y, 0);
     }
-//    private Vector3f midpointAlgorithm(Vector3f vec1, Vector3f vec2, int refinementLevel){
-//
-//        MyRandom rnd = new MyRandom(); // Random number generator kind of
-//
-//        // Get the midpoint
-//        float tempX = (vec1.x + vec2.x) / 2;
-//
-//        // Computer Elevation
-//        double  rg = rnd.nextGaussian(0, 1); // Random Gaussian number
-//        double s = 0.25f; // Surface level factor
-//        // Example: Varying s based on distance or recursion depth
-//
-//        double r = s * rg * Math.abs((vec2.x - vec1.x));
-//
-//        double y = ((vec2.y + vec1.y) / 2) + r;
-//        // y = y < 0 || y > 0.8 ? -y : y; // Don't let elevation go beneath 0
-//        y = Math.max(0, Math.min(1, y)); // Ensure y is between 0 and 1
-//
-//        return new Vector3f(tempX, (float)y, 0); // Return midpoint
-//    }
+
 
     /**
      * Add the two endpoints; randomly choose their elevations
@@ -173,38 +139,86 @@ public class GameModel {
      */
     private void generateTerrain(Entity terrain){
 
-        var t =  terrain.get(Points.class);
+        MyRandom rnd = new MyRandom(); // Make a random number generate object
+        var segments =  terrain.get(ecs.Components.Segments.class); // Get the segments
+        ArrayList<Segment> temp; // Temp array to help copy the new segments into
 
-        ArrayList<Vector3f> temp;
+        // Number of safe zones depends on the level
+        Segment safeZone1;
+        Segment safeZone2 = null;
 
-        for(int i = 0; i < RUN_MIDPOINT_ALGORITHM_TIMES; i++){
+        float safeZone1X = rnd.nextRange(-0.75f, 0.75f); // Make sure the safe zone if 15% away from the edge
+        float safeZone1Y = rnd.nextRange(0, 0.5f);
+
+        Vector3f safeZone1Vec1 = new Vector3f(safeZone1X, safeZone1Y, 0);
+        Vector3f safeZone1Vec2 = new Vector3f(safeZone1X + 0.2f, safeZone1Y, 0);
+
+        safeZone1 = new Segment(safeZone1Vec1,
+                                safeZone1Vec2,
+                                true);
+
+        float safeZone2X = rnd.nextRange(-0.75f, 0.75f); // Make sure the safe zone if 15% away from the edge
+        float safeZone2Y = rnd.nextRange(0, 0.5f);
+        Vector3f safeZone2Vec1 = new Vector3f(safeZone2X, safeZone2Y, 0);
+        Vector3f safeZone2Vec2 = new Vector3f(safeZone2X + 0.2f, safeZone2Y, 0);
+
+
+        segments.add(safeZone1);
+        if(gameLevel == LEVEL.ONE){
+            safeZone2 = new Segment(new Vector3f(safeZone2Vec1),
+                                    new Vector3f(safeZone2Vec2),
+                                    true);
+            segments.add(safeZone2);
+        }
+
+        // Choose two endpoints
+        // Change this to random elevations
+        float elevation1 = 0.01f;// rnd.nextRange(0, 1);
+        float elevation2 = 0.02f;// rnd.nextRange(0, 1);
+
+        Vector3f startPt = new Vector3f(-1, elevation1, 0);
+        Vector3f endPt = new Vector3f(1, elevation2, 0);
+
+        if(gameLevel == LEVEL.TWO){
+            Segment seg1 = new Segment(startPt, safeZone1Vec1, false);
+            Segment seg2 = new Segment(safeZone1Vec2, endPt, false);
+            segments.segments.addFirst(seg1);
+            segments.segments.addLast(seg2);
+        } else {
+            Segment seg1 = new Segment(new Vector3f(startPt), new Vector3f(safeZone1Vec1), false);
+            Segment seg2 = new Segment(new Vector3f(safeZone1Vec2), new Vector3f(endPt), false);
+            segments.segments.addLast(seg2);
+            segments.segments.addFirst(seg1);
+
+            Segment seg3 = new Segment(new Vector3f(safeZone1Vec2), new Vector3f(safeZone2Vec1), false);
+            Segment seg4 = new Segment(new Vector3f(safeZone2Vec2), new Vector3f(endPt), false);
+            segments.segments.addLast(seg3);
+            segments.segments.addLast(seg4);
+        }
+
+
+        for(int i = 0; i < RUN_MIDPOINT_ALGORITHM_TIMES; i++){ // Iterate over the terrain
 
             temp = new ArrayList<>(); // Make temporary array list to replace points array list at end of each iteration
 
-            // Loop through all points except the last and get the midpoint
-            for(int item = 0; item < t.getPoints().size() - 1; item++){
-
-                temp.add(t.getPoints().get(item));
-                Vector3f tempPoint = midpointAlgorithm(t.getPoints().get(item), t.getPoints().get(item+1), i);
-                temp.add(tempPoint);
-
+            for(Segment segment: segments.getSegments()){ // Iterate over the segments
+                if(!segment.safeZone){ // If not the safe zone, apply the midpoint algorithm
+                    Vector3f tempPoint = midpointAlgorithm(segment.startPt, segment.endPt, i); // Call midpoint algorithm
+                    temp.add(new Segment(segment.startPt, tempPoint, false)); // Add new segment
+                    temp.add(new Segment(tempPoint, segment.endPt, false)); // Add new segment
+                } else {
+                    temp.add(new Segment(segment.startPt, segment.endPt, true));
+                }
             }
-            temp.add(t.getPoints().getLast()); // Add last point into temp
-            t.setPoints(temp); // Copy temp into points array list
+            segments.setSegments(temp); // Copy new list of segments into the actual terrain's segments
         }
+
     }
 
 
     private void initializeTerrain(){ // Texture triangle
 
-        float y1 = 0.0f;
-        float y2 = 0.0f;
-
-        Vector3f vec1 = new Vector3f(-1.0f, y1, 0);;
-        Vector3f vec2 = new Vector3f(1.0f, y2, 0);
-
-        var terrain = Terrain.create(vec1, vec2);
-
+        var terrain = Terrain.create();
         addEntity(terrain);
         generateTerrain(terrain);
 
