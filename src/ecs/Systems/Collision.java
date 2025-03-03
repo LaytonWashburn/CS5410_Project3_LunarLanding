@@ -1,5 +1,8 @@
 package ecs.Systems;
 
+import ecs.Components.Movable;
+import ecs.Components.Segments;
+import ecs.Direction;
 import ecs.Entities.Entity;
 import org.joml.Vector2f;
 
@@ -9,16 +12,16 @@ import java.util.Map;
 
 public class Collision extends System {
 
-    public interface IFoodConsumed {
+    public interface IspaceShipRemoved {
         void invoke(Entity entity);
     }
 
-    // private final IFoodConsumed foodConsumed;
+    private final IspaceShipRemoved spaceShipRemoved;
 
-    public Collision(IFoodConsumed foodConsumed) {
-        super(ecs.Components.Position.class);
+    public Collision(IspaceShipRemoved spaceShipRemoved) {
+        super(ecs.Components.Collision.class);
 
-        // this.foodConsumed = foodConsumed;
+        this.spaceShipRemoved = spaceShipRemoved;
     }
 
     /**
@@ -32,18 +35,25 @@ public class Collision extends System {
     public void update(double elapsedTime) {
         var movable = findMovable(entities);
 
+        ecs.Entities.Entity spaceship = null;
+        // Iterate through all the entities
         for (var entity : entities.values()) {
+            // java.lang.System.out.println(entity);
+            // Iterate through the movable entities
             for (var entityMovable : movable) {
-                if (collides(entity, entityMovable)) {
-//                    // If food, that's okay
-//                    if (entity.contains(ecs.Components.Food.class)) {
-//                        entityMovable.get(Movable.class).segmentsToAdd = 3;
-//                        foodConsumed.invoke(entity);
-//                    } else {
-//                        entityMovable.get(ecs.Components.Movable.class).facing = ecs.Components.Movable.ecs.Direction.Stopped;
-//                    }
+                // If the object collided, stop the lander
+                // Need some value to show that the ship exploded
+                if (entity != entityMovable && collides(entity, entityMovable)) { // entity is the terrain, entityMovable is the Lunar Lander
+
+                    java.lang.System.out.println("In the update for the collision");
+                    // entityMovable.get(Movable.class).moving = Direction.None;
+                    // spaceShipRemoved.invoke(entityMovable); // Remove the spaceship that's moveable
+                    spaceship = entityMovable;
                 }
             }
+        }
+        if(spaceship != null){
+            spaceShipRemoved.invoke(spaceship); // Remove the spaceship that's moveable
         }
     }
 
@@ -90,23 +100,18 @@ public class Collision extends System {
      * don't need to look at all the segments in the position, with the
      * exception of the movable itself...a movable can collide with itself.
      */
-    private boolean collides(Entity a, Entity b) {
-//        var aPosition = a.get(ecs.Components.Position.class);
-//        var bPosition = b.get(ecs.Components.Position.class);
-//
-//        // A movable can collide with itself: Check segment against the rest
-//        if (a == b) {
-//            // Have to skip the first segment, that's why using a counted for loop
-//            for (int segment = 1; segment < aPosition.segments.size(); segment++) {
-//                if (aPosition.getX() == aPosition.segments.get(segment).x && aPosition.getY() == aPosition.segments.get(segment).y) {
-//                    return true;
-//                }
-//            }
-//
-//            return false;
-//        }
-//
-//        return aPosition.getX() == bPosition.getX() && aPosition.getY() == bPosition.getY();
+    private boolean collides(Entity a, Entity b) { // a is terrain, b is the lunar lander
+
+        var spaceShipCoordinates = b.get(ecs.Components.Position.class);
+        var segments = a.get(Segments.class);
+        for(Segments.Segment segment: segments.getSegments()){
+            if(lineCircleIntersection(new Vector2f(segment.startPt.x, segment.startPt.y),
+                                      new Vector2f(segment.endPt.x, segment.endPt.y),
+                                      new Vector2f(spaceShipCoordinates.posX +0.15f, spaceShipCoordinates.posY+0.15f),
+                                      0.09f) && !segment.safeZone){
+                return true;
+            }
+        }
         return false;
     }
 

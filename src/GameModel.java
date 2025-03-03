@@ -35,8 +35,10 @@ public class GameModel {
 
         var texSpaceShip = new Texture("resources/characters/spaceship.png");
 
-        gameLevel = LEVEL.ONE; // Set the game level, by default make it level ONE
-        sysCollision = new Collision((Entity entity) -> {});
+        gameLevel = LEVEL.TWO; // Set the game level, by default make it level ONE
+        sysCollision = new Collision((Entity entity) -> {
+            removeEntity(entity); // Save callback state for when the spaceship needs to get removed
+        });
         sysMovement = new Movement();
         sysKeyboardInput = new KeyboardInput(graphics.getWindow());
         sysTerrainRenderer = new TerrainRenderer(graphics);
@@ -224,12 +226,11 @@ public class GameModel {
 
     }
 
-
     // Initialize the Lunar Lander
     private void initializaSpaceShip(Texture texSpaceship){
+        // Initialize the spaceship and rotate it on it's side
         var spaceship = SpaceShip.create(texSpaceship, 0.0f, -0.5f, (0.5f * (float)Math.PI));
         addEntity(spaceship);
     }
-
 
 }
