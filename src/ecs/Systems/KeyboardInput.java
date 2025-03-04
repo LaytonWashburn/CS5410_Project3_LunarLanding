@@ -1,8 +1,6 @@
 package ecs.Systems;
 
-import ecs.Components.Movable;
-import ecs.Components.Rotatable;
-import org.lwjgl.glfw.GLFW;
+import ecs.Components.LunarLander;
 import ecs.Direction;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwGetKey;
@@ -23,10 +21,12 @@ public class KeyboardInput extends System {
         for (var entity : entities.values()) {
             var rotatable = entity.get(ecs.Components.Rotatable.class);
             var input = entity.get(ecs.Components.KeyboardControlled.class);
-            var spaceShip = entity.get(ecs.Components.SpaceShip.class);
+            var lunarLander = entity.get(LunarLander.class);
+            var particles = entity.get(ecs.Components.Particles.class);
             var moving = entity.get(ecs.Components.Movable.class);
 
 
+            // Register the key presses
             if (glfwGetKey(window, input.lookup.get(Direction.Left)) == GLFW_PRESS) {
                 rotatable.rotating = input.keys.get(GLFW_KEY_LEFT);
             }

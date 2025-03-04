@@ -33,6 +33,7 @@ public class Collision extends System {
      */
     @Override
     public void update(double elapsedTime) {
+
         var movable = findMovable(entities);
 
         ecs.Entities.Entity spaceship = null;
@@ -45,16 +46,21 @@ public class Collision extends System {
                 // Need some value to show that the ship exploded
                 if (entity != entityMovable && collides(entity, entityMovable)) { // entity is the terrain, entityMovable is the Lunar Lander
 
+                    // This seems like it's going to overwrite items
+                    // But we only have one lunar lander
                     java.lang.System.out.println("In the update for the collision");
-                    // entityMovable.get(Movable.class).moving = Direction.None;
-                    // spaceShipRemoved.invoke(entityMovable); // Remove the spaceship that's moveable
                     spaceship = entityMovable;
                 }
             }
+
         }
+        // Remove the space
         if(spaceship != null){
             spaceShipRemoved.invoke(spaceship); // Remove the spaceship that's moveable
+            var lunarLander = spaceship.get(ecs.Components.LunarLander.class);
+            lunarLander.shipCrash = true;
         }
+
     }
 
     /**
@@ -102,17 +108,18 @@ public class Collision extends System {
      */
     private boolean collides(Entity a, Entity b) { // a is terrain, b is the lunar lander
 
-        var spaceShipCoordinates = b.get(ecs.Components.Position.class);
-        var segments = a.get(Segments.class);
-        for(Segments.Segment segment: segments.getSegments()){
+        var spaceShipCoordinates = b.get(ecs.Components.Position.class); // Get the position of the lunar lander
+        var segments = a.get(Segments.class); // Get the segments from the terrain
+        for(Segments.Segment segment: segments.getSegments()){ // Iterate through the segments
+            // Test if it collides
             if(lineCircleIntersection(new Vector2f(segment.startPt.x, segment.startPt.y),
                                       new Vector2f(segment.endPt.x, segment.endPt.y),
-                                      new Vector2f(spaceShipCoordinates.posX +0.15f, spaceShipCoordinates.posY+0.15f),
+                                      new Vector2f(spaceShipCoordinates.posX +0.15f, spaceShipCoordinates.posY+0.15f), // I don't like having hard coded values in here
                                       0.09f) && !segment.safeZone){
-                return true;
+                return true; // Return true for a collision
             }
         }
-        return false;
+        return false; // Return false if no collision
     }
 
     // I (Dean) wrote this for use in my Java implementation of the game.

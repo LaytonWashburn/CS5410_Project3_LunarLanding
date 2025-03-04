@@ -38,11 +38,13 @@ public class Movement extends System {
         }
     }
 
+    // Move the lunar lander
+    // Takes the current position in x and y and the rotation, and then translates the points
     private void move(ecs.Entities.Entity entity, float move ) {
-        var movable = entity.get(ecs.Components.Movable.class);
         var position = entity.get(ecs.Components.Position.class);
         var rotatable = entity.get(ecs.Components.Rotatable.class);
 
+        // Get the translation vector
         var vec = translatePoint(new Vector2f(position.posX, position.posY),
                                  rotatable.getRotation(),
                                  -0.01f);
@@ -52,10 +54,11 @@ public class Movement extends System {
 
     private void moveEntity(ecs.Entities.Entity entity, double elapsedTime) {
         var moveable = entity.get(ecs.Components.Movable.class);
-
+        var lunarLander = entity.get(ecs.Components.LunarLander.class);
         switch (moveable.moving) {
             case Direction.Up:
                 move(entity, (0.01f * (float)Math.PI));
+                lunarLander.fuel -= 0.01; // Adjust the amount of fuel on the lunar lander
                 break;
 
         }

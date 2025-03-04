@@ -1,17 +1,15 @@
-import ecs.Components.Segments;
 import ecs.Entities.*;
-import  ecs.Entities.SpaceShip;
+import ecs.Entities.LunarLander;
 import ecs.Systems.*;
 import ecs.Systems.KeyboardInput;
 import edu.usu.graphics.*;
 import org.joml.Vector3f;
-
 import java.util.ArrayList;
 import java.util.List;
 import ecs.Components.Segments.Segment;
 public class GameModel {
 
-
+    // Enum for what level the game is currently on
     public enum LEVEL{
         ONE,
         TWO
@@ -26,23 +24,29 @@ public class GameModel {
     private ecs.Systems.Collision sysCollision;
     private ecs.Systems.Movement sysMovement;
     private ecs.Systems.KeyboardInput sysKeyboardInput;
-    private ecs.Systems.SpaceShipRenderer sysSpaceShipRenderer;
+    private LunarLanderRenderer sysLunarLanderRenderer;
     private ecs.Systems.TerrainRenderer sysTerrainRenderer;
+    private ecs.Systems.BackgroundRenderer sysBackGroundRenderer;
+    private ecs.Systems.HeadsUpDisplayRenderer sysHeadsUpDisplayRenderer;
     private ecs.Systems.Rotation sysRotation;
     private ecs.Systems.Gravity sysGravity;
 
     public void initialize(Graphics2D graphics) {
 
         var texSpaceShip = new Texture("resources/characters/spaceship.png");
+        var texBackground = new Texture("resources/images/background.png");
+        Font fontHeadsUpDisplay = new Font("resources/fonts/Roboto-bold.ttf", 64, true);
 
         gameLevel = LEVEL.TWO; // Set the game level, by default make it level ONE
         sysCollision = new Collision((Entity entity) -> {
-            removeEntity(entity); // Save callback state for when the spaceship needs to get removed
+            // removeEntity(entity); // Save callback state for when the spaceship needs to get removed
         });
-        sysMovement = new Movement();
-        sysKeyboardInput = new KeyboardInput(graphics.getWindow());
-        sysTerrainRenderer = new TerrainRenderer(graphics);
-        sysSpaceShipRenderer = new SpaceShipRenderer(graphics);
+        sysMovement = new Movement(); // Movement System
+        sysKeyboardInput = new KeyboardInput(graphics.getWindow()); // KeyboardInput System
+        sysBackGroundRenderer = new BackgroundRenderer(graphics, texBackground);
+        sysTerrainRenderer = new TerrainRenderer(graphics); // TerrainRenderer System
+        sysLunarLanderRenderer = new LunarLanderRenderer(graphics); //
+        sysHeadsUpDisplayRenderer = new HeadsUpDisplayRenderer(graphics, fontHeadsUpDisplay);
         sysRotation = new Rotation();
         sysGravity = new Gravity();
 
@@ -54,6 +58,7 @@ public class GameModel {
     public void update(double elapsedTime) {
         // Because ECS framework, input processing is now part of the update
         sysKeyboardInput.update(elapsedTime);
+
         // Now do the normal update
         sysMovement.update(elapsedTime);
         sysCollision.update(elapsedTime);
@@ -70,9 +75,12 @@ public class GameModel {
 
         // Because ECS framework, rendering is now part of the update
         sysTerrainRenderer.update(elapsedTime); // Render the terrain
-        sysSpaceShipRenderer.update(elapsedTime); // Render the spaceship
-        sysRotation.update(elapsedTime);
-        sysGravity.update(elapsedTime);
+        // Update the background
+        sysBackGroundRenderer.update(elapsedTime);
+        sysLunarLanderRenderer.update(elapsedTime); // Render the lunar lander
+        sysHeadsUpDisplayRenderer.update(elapsedTime);
+        sysRotation.update(elapsedTime); // Update the rotation
+        sysGravity.update(elapsedTime); // Update the gravity
     }
 
 
@@ -82,9 +90,11 @@ public class GameModel {
         sysMovement.add(entity);
         sysCollision.add(entity);
         sysTerrainRenderer.add(entity);
-        sysSpaceShipRenderer.add(entity);
+        sysLunarLanderRenderer.add(entity);
         sysRotation.add(entity);
         sysGravity.add(entity);
+        sysBackGroundRenderer.add(entity);
+        sysHeadsUpDisplayRenderer.add(entity);
     }
 
     private void removeEntity(Entity entity) {
@@ -92,9 +102,11 @@ public class GameModel {
         sysMovement.remove(entity.getId());
         sysCollision.remove(entity.getId());
         sysTerrainRenderer.remove(entity.getId());
-        sysSpaceShipRenderer.remove(entity.getId());
+        sysLunarLanderRenderer.remove(entity.getId());
         sysRotation.remove(entity.getId());
         sysGravity.remove(entity.getId());
+        sysBackGroundRenderer.remove(entity.getId());
+        sysHeadsUpDisplayRenderer.remove(entity.getId());
     }
 
 
@@ -142,14 +154,14 @@ public class GameModel {
     private void generateTerrain(Entity terrain){
 
         MyRandom rnd = new MyRandom(); // Make a random number generate object
-        var segments =  terrain.get(ecs.Components.Segments.class); // Get the segments
+
+        var segments =  terrain.get(ecs.Components.Segments.class); // Get the segments from the terrain
         ArrayList<Segment> temp; // Temp array to help copy the new segments into
 
         // Number of safe zones depends on the level
         Segment safeZone1;
-        Segment safeZone2 = null;
 
-        float safeZone1X = rnd.nextRange(-0.75f, 0.75f); // Make sure the safe zone if 15% away from the edge
+        float safeZone1X = rnd.nextRange(-0.75f, 0.75f); // Make sure the safe zone if 15% away from the edge of the screen
         float safeZone1Y = rnd.nextRange(0, 0.5f);
 
         Vector3f safeZone1Vec1 = new Vector3f(safeZone1X, safeZone1Y, 0);
@@ -159,19 +171,8 @@ public class GameModel {
                                 safeZone1Vec2,
                                 true);
 
-        float safeZone2X = rnd.nextRange(-0.75f, 0.75f); // Make sure the safe zone if 15% away from the edge
-        float safeZone2Y = rnd.nextRange(0, 0.5f);
-        Vector3f safeZone2Vec1 = new Vector3f(safeZone2X, safeZone2Y, 0);
-        Vector3f safeZone2Vec2 = new Vector3f(safeZone2X + 0.2f, safeZone2Y, 0);
-
-
         segments.add(safeZone1);
-        if(gameLevel == LEVEL.ONE){
-            safeZone2 = new Segment(new Vector3f(safeZone2Vec1),
-                                    new Vector3f(safeZone2Vec2),
-                                    true);
-            segments.add(safeZone2);
-        }
+
 
         // Choose two endpoints
         // Change this to random elevations
@@ -184,18 +185,8 @@ public class GameModel {
         if(gameLevel == LEVEL.TWO){
             Segment seg1 = new Segment(startPt, safeZone1Vec1, false);
             Segment seg2 = new Segment(safeZone1Vec2, endPt, false);
-            segments.segments.addFirst(seg1);
-            segments.segments.addLast(seg2);
-        } else {
-            Segment seg1 = new Segment(new Vector3f(startPt), new Vector3f(safeZone1Vec1), false);
-            Segment seg2 = new Segment(new Vector3f(safeZone1Vec2), new Vector3f(endPt), false);
-            segments.segments.addLast(seg2);
-            segments.segments.addFirst(seg1);
-
-            Segment seg3 = new Segment(new Vector3f(safeZone1Vec2), new Vector3f(safeZone2Vec1), false);
-            Segment seg4 = new Segment(new Vector3f(safeZone2Vec2), new Vector3f(endPt), false);
-            segments.segments.addLast(seg3);
-            segments.segments.addLast(seg4);
+            segments.add(seg1);
+            segments.add(seg2);
         }
 
 
@@ -229,7 +220,7 @@ public class GameModel {
     // Initialize the Lunar Lander
     private void initializaSpaceShip(Texture texSpaceship){
         // Initialize the spaceship and rotate it on it's side
-        var spaceship = SpaceShip.create(texSpaceship, 0.0f, -0.5f, (0.5f * (float)Math.PI));
+        var spaceship = LunarLander.create(texSpaceship, 0.0f, -0.5f, (0.5f * (float)Math.PI));
         addEntity(spaceship);
     }
 
