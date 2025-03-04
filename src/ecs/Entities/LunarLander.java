@@ -1,5 +1,7 @@
 package ecs.Entities;
 import ecs.Direction;
+import edu.usu.audio.Sound;
+import edu.usu.audio.SoundManager;
 import edu.usu.graphics.Color;
 import edu.usu.graphics.Texture;
 import org.joml.Vector2f;
@@ -11,7 +13,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 
 public class LunarLander {
 
-    public static Entity create(Texture texSpaceShip, float x, float y, float rotation) {
+    public static Entity create(Texture texSpaceShip, float x, float y, float rotation, Sound thrust, Sound crash) {
         final double MOVE_INTERVAL = .150; // seconds
 
         var lunarLander = new Entity();
@@ -33,6 +35,7 @@ public class LunarLander {
                         GLFW_KEY_RIGHT, Direction.Right,
                         GLFW_KEY_UP, Direction.Up
                 )));
+        lunarLander.add(new ecs.Components.Sounds(thrust, crash));
 
         return lunarLander;
     }

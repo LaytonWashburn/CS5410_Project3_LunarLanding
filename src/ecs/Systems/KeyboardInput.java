@@ -24,7 +24,7 @@ public class KeyboardInput extends System {
             var lunarLander = entity.get(LunarLander.class);
             var particles = entity.get(ecs.Components.Particles.class);
             var moving = entity.get(ecs.Components.Movable.class);
-
+            var sounds = entity.get(ecs.Components.Sounds.class);
 
             // Register the key presses
             if (glfwGetKey(window, input.lookup.get(Direction.Left)) == GLFW_PRESS) {
@@ -35,6 +35,7 @@ public class KeyboardInput extends System {
             }
             else if (glfwGetKey(window, input.lookup.get(Direction.Up)) == GLFW_PRESS) {
                 moving.moving = input.keys.get(GLFW_KEY_UP);
+                sounds.playThrust();
             }
             else {
                 rotatable.rotating = Direction.None;

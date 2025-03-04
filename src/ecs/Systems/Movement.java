@@ -10,6 +10,7 @@ import org.joml.Vector2i;
  * entity with movable & position components.
  */
 public class Movement extends System {
+
     public Movement() {
         super(ecs.Components.Movable.class, ecs.Components.Position.class);
     }
@@ -47,7 +48,7 @@ public class Movement extends System {
         // Get the translation vector
         var vec = translatePoint(new Vector2f(position.posX, position.posY),
                                  rotatable.getRotation(),
-                                 -0.01f);
+                                 -0.005f);
         position.posX = vec.x;
         position.posY = vec.y;
     }

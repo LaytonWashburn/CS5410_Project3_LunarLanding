@@ -2,8 +2,12 @@ import ecs.Entities.*;
 import ecs.Entities.LunarLander;
 import ecs.Systems.*;
 import ecs.Systems.KeyboardInput;
+import edu.usu.audio.Sound;
+import edu.usu.audio.SoundManager;
 import edu.usu.graphics.*;
 import org.joml.Vector3f;
+
+import java.lang.System;
 import java.util.ArrayList;
 import java.util.List;
 import ecs.Components.Segments.Segment;
@@ -31,13 +35,22 @@ public class GameModel {
     private ecs.Systems.Rotation sysRotation;
     private ecs.Systems.Gravity sysGravity;
 
+
+    private SoundManager audio;
+    private Sound crash;
+    private Sound thrust;
+
     public void initialize(Graphics2D graphics) {
 
-        var texSpaceShip = new Texture("resources/characters/spaceship.png");
+        var texSpaceShip = new Texture("resources/characters/lander.png");
         var texBackground = new Texture("resources/images/background.png");
         Font fontHeadsUpDisplay = new Font("resources/fonts/Roboto-bold.ttf", 64, true);
 
-        gameLevel = LEVEL.TWO; // Set the game level, by default make it level ONE
+        audio = new SoundManager();
+        thrust = audio.load("thrust", "resources/audio/thrust.ogg", false);
+        crash = audio.load("crash", "resources/audio/crash.ogg", false);
+
+        gameLevel = LEVEL.ONE; // Set the game level, by default make it level ONE
         sysCollision = new Collision((Entity entity) -> {
             // removeEntity(entity); // Save callback state for when the spaceship needs to get removed
         });
@@ -154,13 +167,15 @@ public class GameModel {
     private void generateTerrain(Entity terrain){
 
         MyRandom rnd = new MyRandom(); // Make a random number generate object
+        List<Segment> safeZones = new ArrayList<>(); // Make list of safe zones
 
         var segments =  terrain.get(ecs.Components.Segments.class); // Get the segments from the terrain
-        ArrayList<Segment> temp; // Temp array to help copy the new segments into
 
         // Number of safe zones depends on the level
         Segment safeZone1;
+        Segment safeZone2;
 
+        // Generate Safe zone x value
         float safeZone1X = rnd.nextRange(-0.75f, 0.75f); // Make sure the safe zone if 15% away from the edge of the screen
         float safeZone1Y = rnd.nextRange(0, 0.5f);
 
@@ -171,25 +186,59 @@ public class GameModel {
                                 safeZone1Vec2,
                                 true);
 
-        segments.add(safeZone1);
+        // segments.add(safeZone1);
+        safeZones.add(safeZone1);
 
+        float safeZone2X = rnd.nextRange(-0.75f, 0.75f); // THIS CANNOT BE HARDCODED
+        float safeZone2Y = rnd.nextRange(0, 0.5f);// THIS CANNOT BE HARDCODED
+        if(gameLevel == LEVEL.ONE){
+            safeZone2X = rnd.nextRange(-0.75f, 0.75f);
+            safeZone2Y = rnd.nextRange(0, 0.5f);
+             while (safeZone2X != safeZone1X && safeZone2Y != safeZone1Y){
+                 safeZone2X = rnd.nextRange(-0.75f, 0.75f); // Make sure the safe zone if 15% away from the edge of the screen
+                 safeZone2Y = rnd.nextRange(0, 0.5f);
+             }
+
+            Vector3f safeZone2Vec1 = new Vector3f(safeZone2X, safeZone2Y, 0);
+            Vector3f safeZone2Vec2 = new Vector3f(safeZone2X + 0.2f, safeZone2Y, 0);
+
+            safeZone2 = new Segment(safeZone2Vec1,
+                    safeZone2Vec2,
+                    true);
+
+            safeZones.add(safeZone2);
+        }
+
+//        System.out.println("Here is safe zone 1 x: " + safeZone1X);
+//        System.out.println("Here is safe zone 1 y: " + safeZone1Y);
+//        System.out.println("Here is safe zone 2 x: " + safeZone2X);
+//        System.out.println("Here is safe zone 2 y: " + safeZone2Y);
 
         // Choose two endpoints
         // Change this to random elevations
-        float elevation1 = 0.01f;// rnd.nextRange(0, 1);
-        float elevation2 = 0.02f;// rnd.nextRange(0, 1);
+        float elevation1 = rnd.nextRange(0, 0.75f);
+        float elevation2 = rnd.nextRange(0, 0.75f);
 
         Vector3f startPt = new Vector3f(-1, elevation1, 0);
         Vector3f endPt = new Vector3f(1, elevation2, 0);
 
-        if(gameLevel == LEVEL.TWO){
-            Segment seg1 = new Segment(startPt, safeZone1Vec1, false);
-            Segment seg2 = new Segment(safeZone1Vec2, endPt, false);
+        Vector3f pt = new Vector3f(startPt);
+
+        // Make the initial segments
+        for(Segment segment: safeZones){
+            Segment seg1 = new Segment(pt, segment.startPt, false);
             segments.add(seg1);
-            segments.add(seg2);
+            segments.add(segment);
+            pt = new Vector3f(segment.endPt);
         }
 
+        segments.add(new Segment(pt, endPt, false));
 
+//        for(Segment seg : segments.getSegments()){
+//            System.out.println(seg.startPt.x + " , " + seg.startPt.y + " : " + seg.endPt.x + " , " + seg.endPt.y + " : " + seg.safeZone);
+//        }
+
+        ArrayList<Segment> temp; // Temp array to help copy the new segments into
         for(int i = 0; i < RUN_MIDPOINT_ALGORITHM_TIMES; i++){ // Iterate over the terrain
 
             temp = new ArrayList<>(); // Make temporary array list to replace points array list at end of each iteration
@@ -220,7 +269,7 @@ public class GameModel {
     // Initialize the Lunar Lander
     private void initializaSpaceShip(Texture texSpaceship){
         // Initialize the spaceship and rotate it on it's side
-        var spaceship = LunarLander.create(texSpaceship, 0.0f, -0.5f, (0.5f * (float)Math.PI));
+        var spaceship = LunarLander.create(texSpaceship, 0.0f, -0.5f, (0.5f * (float)Math.PI), thrust, crash);
         addEntity(spaceship);
     }
 

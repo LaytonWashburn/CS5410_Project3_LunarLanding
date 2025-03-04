@@ -110,14 +110,19 @@ public class Collision extends System {
 
         var spaceShipCoordinates = b.get(ecs.Components.Position.class); // Get the position of the lunar lander
         var segments = a.get(Segments.class); // Get the segments from the terrain
+        // var movable = b.get(ecs.Components.Movable.class);
+
         for(Segments.Segment segment: segments.getSegments()){ // Iterate through the segments
             // Test if it collides
-            if(lineCircleIntersection(new Vector2f(segment.startPt.x, segment.startPt.y),
-                                      new Vector2f(segment.endPt.x, segment.endPt.y),
-                                      new Vector2f(spaceShipCoordinates.posX +0.15f, spaceShipCoordinates.posY+0.15f), // I don't like having hard coded values in here
-                                      0.09f) && !segment.safeZone){
+            boolean collision = lineCircleIntersection(new Vector2f(segment.startPt.x, segment.startPt.y),
+                    new Vector2f(segment.endPt.x, segment.endPt.y),
+                    new Vector2f(spaceShipCoordinates.posX +0.1f, spaceShipCoordinates.posY+0.1f), // I don't like having hard coded values in here
+                    0.09f);
+            if( collision && !segment.safeZone){
                 return true; // Return true for a collision
             }
+            // This is where the check for the speed and angle need to be
+            // if (collision) {}
         }
         return false; // Return false if no collision
     }

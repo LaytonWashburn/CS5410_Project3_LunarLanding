@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Have a super rough collision system working. Not very good. Takes the safe zones into account.">
+    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Heads Up Display working alright. Need to figure out speed for the lunar lander.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ecs/Entities/SpaceShip.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ecs/Systems/Collision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/Collision.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ecs/Systems/KeyboardInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/KeyboardInput.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ecs/Systems/Movement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/Movement.java" afterDir="false" />
@@ -166,7 +166,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740980796631</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Heads Up Display working alright. Need to figure out speed for the lunar lander.">
+      <option name="closed" value="true" />
+      <created>1741061546968</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1741061546968</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -178,7 +186,8 @@
     <MESSAGE value="Better terrain generator, still needs work." />
     <MESSAGE value="Safe zones added, level one with two safe zones not working properly." />
     <MESSAGE value="Have a super rough collision system working. Not very good. Takes the safe zones into account." />
-    <option name="LAST_COMMIT_MESSAGE" value="Have a super rough collision system working. Not very good. Takes the safe zones into account." />
+    <MESSAGE value="Heads Up Display working alright. Need to figure out speed for the lunar lander." />
+    <option name="LAST_COMMIT_MESSAGE" value="Heads Up Display working alright. Need to figure out speed for the lunar lander." />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
