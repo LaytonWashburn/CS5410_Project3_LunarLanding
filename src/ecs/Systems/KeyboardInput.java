@@ -40,7 +40,6 @@ public class KeyboardInput extends System {
             else {
                 rotatable.rotating = Direction.None;
                 moving.moving = Direction.None;
-
             }
         }
     }

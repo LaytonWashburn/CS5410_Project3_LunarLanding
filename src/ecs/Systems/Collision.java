@@ -116,7 +116,7 @@ public class Collision extends System {
             // Test if it collides
             boolean collision = lineCircleIntersection(new Vector2f(segment.startPt.x, segment.startPt.y),
                     new Vector2f(segment.endPt.x, segment.endPt.y),
-                    new Vector2f(spaceShipCoordinates.posX +0.1f, spaceShipCoordinates.posY+0.1f), // I don't like having hard coded values in here
+                    new Vector2f(spaceShipCoordinates.getPosX() +0.1f, spaceShipCoordinates.getPosY()+0.1f), // I don't like having hard coded values in here
                     0.09f);
             if( collision && !segment.safeZone){
                 return true; // Return true for a collision

@@ -8,21 +8,22 @@ import java.util.List;
 
 public class Position extends Component {
 
-    public float posX;
-    public float posY;
+//    public float posX;
+//    public float posY;
     public Vector2f vector;
     public Position(float x, float y) {
-        this.posX = x;
-        this.posY = y;
+//        this.posX = x;
+//        this.posY = y;
+        this.vector = new Vector2f(x, y);
     }
 
     public float getPosX() {
-
-        return this.posX;
+        return this.vector.x;
+        // return this.posX;
     }
 
     public float getPosY() {
-
-        return this.posY;
+        return  this.vector.y;
+        // return this.posY;
     }
 }
