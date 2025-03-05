@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Saving work on terrain">
+    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Momentum and rotation working. Starting work on particle system.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ecs/Components/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Components/Position.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StarterProject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StarterProject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ecs/Systems/Collision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/Collision.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ecs/Systems/KeyboardInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/KeyboardInput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ecs/Systems/Movement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/Movement.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +57,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/layto/USU/CS5410/ClassNotes/Particles - Step 5 - Better Memory",
+    "last_opened_file_path": "C:/Users/layto/USU/CS5410/ClassNotes/Particles - Step 5 - Better Memory/Particles - Step 5 - Better Memory",
     "project.structure.last.edited": "Global Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -189,7 +190,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741140739139</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Momentum and rotation working. Starting work on particle system.">
+      <option name="closed" value="true" />
+      <created>1741148881166</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1741148881166</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -204,7 +213,8 @@
     <MESSAGE value="Heads Up Display working alright. Need to figure out speed for the lunar lander." />
     <MESSAGE value="Saving work for the night. Rough audio, need new files or figure out a different way, doesn't sound good." />
     <MESSAGE value="Saving work on terrain" />
-    <option name="LAST_COMMIT_MESSAGE" value="Saving work on terrain" />
+    <MESSAGE value="Momentum and rotation working. Starting work on particle system." />
+    <option name="LAST_COMMIT_MESSAGE" value="Momentum and rotation working. Starting work on particle system." />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

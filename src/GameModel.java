@@ -6,8 +6,6 @@ import edu.usu.audio.Sound;
 import edu.usu.audio.SoundManager;
 import edu.usu.graphics.*;
 import org.joml.Vector3f;
-
-import java.lang.System;
 import java.util.ArrayList;
 import java.util.List;
 import ecs.Components.Segments.Segment;
@@ -15,16 +13,19 @@ public class GameModel {
 
     // Enum for what level the game is currently on
     public enum LEVEL{
-        ONE,
-        TWO
+        ONE, // Level 1
+        TWO, // Level 2
+        TRANSITION, // Transitioning between levels
+        END // Game has ended
     }
 
+    // Globals
     private int RUN_MIDPOINT_ALGORITHM_TIMES = 7;
     private LEVEL gameLevel;
     private final List<Entity> removeThese = new ArrayList<>();
     private final List<Entity> addThese = new ArrayList<>();
 
-
+    // Systems
     private ecs.Systems.Collision sysCollision;
     private ecs.Systems.Movement sysMovement;
     private ecs.Systems.KeyboardInput sysKeyboardInput;
@@ -33,24 +34,31 @@ public class GameModel {
     private ecs.Systems.BackgroundRenderer sysBackGroundRenderer;
     private ecs.Systems.HeadsUpDisplayRenderer sysHeadsUpDisplayRenderer;
     private ecs.Systems.Rotation sysRotation;
-    private ecs.Systems.Gravity sysGravity;
+    private ecs.Systems.ParticleRenderer sysParticleSystem;
+    private ecs.Systems.Levels sysLevels;
 
+    // Textures
+    Texture texSpaceShip;
+    Texture texBackground;
+    Texture texParticle;
 
+    // Sound
     private SoundManager audio;
     private Sound crash;
     private Sound thrust;
 
     public void initialize(Graphics2D graphics) {
 
-        var texSpaceShip = new Texture("resources/characters/lander.png");
-        var texBackground = new Texture("resources/images/background.png");
+        texSpaceShip = new Texture("resources/characters/lander.png");
+        texBackground = new Texture("resources/images/background.png");
+        texParticle = new Texture("resources/images/smoke.png");
         Font fontHeadsUpDisplay = new Font("resources/fonts/Roboto-bold.ttf", 64, true);
 
         audio = new SoundManager();
         thrust = audio.load("thrust", "resources/audio/thrust.ogg", false);
         crash = audio.load("crash", "resources/audio/crash.ogg", false);
 
-        gameLevel = LEVEL.ONE; // Set the game level, by default make it level ONE
+        gameLevel = LEVEL.TWO; // Set the game level, by default make it level ONE
         sysCollision = new Collision((Entity entity) -> {
             // removeEntity(entity); // Save callback state for when the spaceship needs to get removed
         });
@@ -61,10 +69,10 @@ public class GameModel {
         sysLunarLanderRenderer = new LunarLanderRenderer(graphics); //
         sysHeadsUpDisplayRenderer = new HeadsUpDisplayRenderer(graphics, fontHeadsUpDisplay);
         sysRotation = new Rotation();
-        sysGravity = new Gravity();
-
+        sysParticleSystem = new ParticleRenderer(graphics, texParticle); // Particle system
+        sysLevels = new Levels(graphics);
         initializeTerrain();
-        initializaSpaceShip(texSpaceShip);
+        initializeSpaceShip(texSpaceShip);
 
     }
 
@@ -88,15 +96,12 @@ public class GameModel {
 
         // Because ECS framework, rendering is now part of the update
         sysTerrainRenderer.update(elapsedTime); // Render the terrain
-        // Update the background
-        sysBackGroundRenderer.update(elapsedTime);
+        sysBackGroundRenderer.update(elapsedTime);    // Update the background
         sysLunarLanderRenderer.update(elapsedTime); // Render the lunar lander
         sysHeadsUpDisplayRenderer.update(elapsedTime);
         sysRotation.update(elapsedTime); // Update the rotation
-        sysGravity.update(elapsedTime); // Update the gravity
+        sysParticleSystem.update(elapsedTime);
     }
-
-
 
     private void addEntity(Entity entity) {
         sysKeyboardInput.add(entity);
@@ -105,9 +110,9 @@ public class GameModel {
         sysTerrainRenderer.add(entity);
         sysLunarLanderRenderer.add(entity);
         sysRotation.add(entity);
-        sysGravity.add(entity);
         sysBackGroundRenderer.add(entity);
         sysHeadsUpDisplayRenderer.add(entity);
+        sysParticleSystem.add(entity);
     }
 
     private void removeEntity(Entity entity) {
@@ -117,9 +122,9 @@ public class GameModel {
         sysTerrainRenderer.remove(entity.getId());
         sysLunarLanderRenderer.remove(entity.getId());
         sysRotation.remove(entity.getId());
-        sysGravity.remove(entity.getId());
         sysBackGroundRenderer.remove(entity.getId());
         sysHeadsUpDisplayRenderer.remove(entity.getId());
+        sysParticleSystem.remove(entity.getId());
     }
 
 
@@ -203,11 +208,6 @@ public class GameModel {
             safeZones.add(safeZone2);
         }
 
-//        System.out.println("Here is safe zone 1 x: " + safeZone1X);
-//        System.out.println("Here is safe zone 1 y: " + safeZone1Y);
-//        System.out.println("Here is safe zone 2 x: " + safeZone2X);
-//        System.out.println("Here is safe zone 2 y: " + safeZone2Y);
-
         // Choose two endpoints
         // Change this to random elevations
         float elevation1 = rnd.nextRange(0, 0.75f);
@@ -228,10 +228,6 @@ public class GameModel {
 
         segments.add(new Segment(pt, endPt, false));
 
-//        for(Segment seg : segments.getSegments()){
-//            System.out.println(seg.startPt.x + " , " + seg.startPt.y + " : " + seg.endPt.x + " , " + seg.endPt.y + " : " + seg.safeZone);
-//        }
-
         ArrayList<Segment> temp; // Temp array to help copy the new segments into
         for(int i = 0; i < RUN_MIDPOINT_ALGORITHM_TIMES; i++){ // Iterate over the terrain
 
@@ -251,17 +247,14 @@ public class GameModel {
 
     }
 
-
     private void initializeTerrain(){ // Texture triangle
-
         var terrain = Terrain.create();
         addEntity(terrain);
         generateTerrain(terrain);
-
     }
 
     // Initialize the Lunar Lander
-    private void initializaSpaceShip(Texture texSpaceship){
+    private void initializeSpaceShip(Texture texSpaceship){
         // Initialize the spaceship and rotate it on it's side
         var spaceship = LunarLander.create(texSpaceship, 0.0f, -0.5f, (0.5f * (float)Math.PI), thrust, crash);
         addEntity(spaceship);

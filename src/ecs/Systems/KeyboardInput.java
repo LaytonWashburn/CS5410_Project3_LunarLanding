@@ -1,6 +1,7 @@
 package ecs.Systems;
 
 import ecs.Components.LunarLander;
+import ecs.Components.Particles;
 import ecs.Direction;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwGetKey;
@@ -22,7 +23,7 @@ public class KeyboardInput extends System {
             var rotatable = entity.get(ecs.Components.Rotatable.class);
             var input = entity.get(ecs.Components.KeyboardControlled.class);
             var lunarLander = entity.get(LunarLander.class);
-            var particles = entity.get(ecs.Components.Particles.class);
+            var particles = entity.get(Particles.class);
             var moving = entity.get(ecs.Components.Movable.class);
             var sounds = entity.get(ecs.Components.Sounds.class);
 

@@ -1,7 +1,7 @@
 package ecs.Entities;
+import ecs.Components.Particles;
 import ecs.Direction;
 import edu.usu.audio.Sound;
-import edu.usu.audio.SoundManager;
 import edu.usu.graphics.Color;
 import edu.usu.graphics.Texture;
 import org.joml.Vector2f;
@@ -24,7 +24,7 @@ public class LunarLander {
         lunarLander.add(new ecs.Components.Collision());
         lunarLander.add(new ecs.Components.Position(x, y));
         lunarLander.add(new ecs.Components.Rotatable(rotation));
-        lunarLander.add(new ecs.Components.Particles(new Vector2f(0, 0),
+        lunarLander.add(new Particles(new Vector2f(0, 0),
                                                 0.015f, 0.004f,
                                                 0.07f, 0.05f,
                                                 3, 1));
