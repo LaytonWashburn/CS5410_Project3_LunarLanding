@@ -16,6 +16,10 @@ public class Movement extends System {
     }
 
 
+    // Momentum
+    // Applied thrust changes the momentum,
+    // Thrust doens't change the ship
+    // Momentum and elasped time moves the ship
     public static Vector2f translatePoint(Vector2f point, float angleRadians, float movementDistance) {
         // Calculate the movement in the x direction using cosine of the angle
         float dy = movementDistance * (float) Math.cos(angleRadians);

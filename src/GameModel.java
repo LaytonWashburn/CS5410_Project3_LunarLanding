@@ -169,14 +169,15 @@ public class GameModel {
         MyRandom rnd = new MyRandom(); // Make a random number generate object
         List<Segment> safeZones = new ArrayList<>(); // Make list of safe zones
 
-        var segments =  terrain.get(ecs.Components.Segments.class); // Get the segments from the terrain
+        var segments =  terrain.get(ecs.Components.Segments.class); // Get the segments from the terrain. initially empty
 
         // Number of safe zones depends on the level
         Segment safeZone1;
         Segment safeZone2;
 
         // Generate Safe zone x value
-        float safeZone1X = rnd.nextRange(-0.75f, 0.75f); // Make sure the safe zone if 15% away from the edge of the screen
+        // Make the range on the left
+        float safeZone1X = rnd.nextRange(-0.75f, -0.2f); // Make sure the safe zone if 15% away from the edge of the screen
         float safeZone1Y = rnd.nextRange(0, 0.5f);
 
         Vector3f safeZone1Vec1 = new Vector3f(safeZone1X, safeZone1Y, 0);
@@ -186,18 +187,11 @@ public class GameModel {
                                 safeZone1Vec2,
                                 true);
 
-        // segments.add(safeZone1);
         safeZones.add(safeZone1);
 
-        float safeZone2X = rnd.nextRange(-0.75f, 0.75f); // THIS CANNOT BE HARDCODED
-        float safeZone2Y = rnd.nextRange(0, 0.5f);// THIS CANNOT BE HARDCODED
+        float safeZone2X = rnd.nextRange(0.2f, 0.75f);
+        float safeZone2Y = rnd.nextRange(0, 0.5f);
         if(gameLevel == LEVEL.ONE){
-            safeZone2X = rnd.nextRange(-0.75f, 0.75f);
-            safeZone2Y = rnd.nextRange(0, 0.5f);
-             while (safeZone2X != safeZone1X && safeZone2Y != safeZone1Y){
-                 safeZone2X = rnd.nextRange(-0.75f, 0.75f); // Make sure the safe zone if 15% away from the edge of the screen
-                 safeZone2Y = rnd.nextRange(0, 0.5f);
-             }
 
             Vector3f safeZone2Vec1 = new Vector3f(safeZone2X, safeZone2Y, 0);
             Vector3f safeZone2Vec2 = new Vector3f(safeZone2X + 0.2f, safeZone2Y, 0);
