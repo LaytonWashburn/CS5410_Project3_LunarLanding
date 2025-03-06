@@ -26,21 +26,24 @@ public class KeyboardInput extends System {
             var particles = entity.get(Particles.class);
             var moving = entity.get(ecs.Components.Movable.class);
             var sounds = entity.get(ecs.Components.Sounds.class);
+            var keyboard = entity.get(ecs.Components.KeyboardControlled.class);
 
-            // Register the key presses
-            if (glfwGetKey(window, input.lookup.get(Direction.Left)) == GLFW_PRESS) {
-                rotatable.rotating = input.keys.get(GLFW_KEY_LEFT);
-            }
-            else if (glfwGetKey(window, input.lookup.get(Direction.Right)) == GLFW_PRESS) {
-                rotatable.rotating = input.keys.get(GLFW_KEY_RIGHT);
-            }
-            else if (glfwGetKey(window, input.lookup.get(Direction.Up)) == GLFW_PRESS) {
-                moving.moving = input.keys.get(GLFW_KEY_UP);
-                sounds.playThrust();
-            }
-            else {
-                rotatable.rotating = Direction.None;
-                moving.moving = Direction.None;
+            if(keyboard.enabled){
+                // Register the key presses
+                if (glfwGetKey(window, input.lookup.get(Direction.Left)) == GLFW_PRESS) {
+                    rotatable.rotating = input.keys.get(GLFW_KEY_LEFT);
+                }
+                else if (glfwGetKey(window, input.lookup.get(Direction.Right)) == GLFW_PRESS) {
+                    rotatable.rotating = input.keys.get(GLFW_KEY_RIGHT);
+                }
+                else if (glfwGetKey(window, input.lookup.get(Direction.Up)) == GLFW_PRESS) {
+                    moving.moving = input.keys.get(GLFW_KEY_UP);
+                    sounds.playThrust();
+                }
+                else {
+                    rotatable.rotating = Direction.None;
+                    moving.moving = Direction.None;
+                }
             }
         }
     }

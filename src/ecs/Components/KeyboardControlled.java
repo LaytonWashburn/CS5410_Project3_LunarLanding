@@ -7,6 +7,8 @@ public class KeyboardControlled extends Component {
     public Map<Integer, Direction> keys;
     public Map<Direction, Integer> lookup;
 
+    public boolean enabled;
+
     public KeyboardControlled(Map<Integer, Direction> keys) {
         this.keys = keys;
 
@@ -15,5 +17,7 @@ public class KeyboardControlled extends Component {
         for (var mapping : keys.entrySet()) {
             lookup.put(mapping.getValue(), mapping.getKey());
         }
+
+        enabled = true;
     }
 }

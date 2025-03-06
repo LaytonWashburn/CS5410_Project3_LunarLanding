@@ -36,7 +36,7 @@ public class LunarLander {
                         GLFW_KEY_UP, Direction.Up
                 )));
         lunarLander.add(new ecs.Components.Sounds(thrust, crash));
-
+        lunarLander.add(new ecs.Components.Level());
         return lunarLander;
     }
 

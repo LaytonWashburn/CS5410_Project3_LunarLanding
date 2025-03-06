@@ -41,16 +41,19 @@ public class Movement extends System {
         var position = entity.get(ecs.Components.Position.class);
         var gravity = entity.get(ecs.Components.Gravity.class);
         var rotatable = entity.get(ecs.Components.Rotatable.class);
+        var keyboard = entity.get(ecs.Components.KeyboardControlled.class);
 
-        lunarLander.momentum.y += gravity.gravity.y * (float)elapsedTime;
+        if(keyboard.enabled){
+            lunarLander.momentum.y += gravity.gravity.y * (float)elapsedTime;
 
-        if (Objects.requireNonNull(moveable.moving) == Direction.Up) {
+            if (Objects.requireNonNull(moveable.moving) == Direction.Up) {
 
-            lunarLander.fuel -= 0.01; // Adjust the amount of fuel on the lunar lander
-            lunarLander.momentum = lunarLander.momentum.sub(thrust(lunarLander.momentum, rotatable.getRotation(), elapsedTime).mul((float)elapsedTime));
+                lunarLander.fuel -= 0.01; // Adjust the amount of fuel on the lunar lander
+                lunarLander.momentum = lunarLander.momentum.sub(thrust(lunarLander.momentum, rotatable.getRotation(), elapsedTime).mul((float)elapsedTime));
+            }
+
+            position.vector = position.vector.add(lunarLander.momentum);
         }
-
-        position.vector = position.vector.add(lunarLander.momentum);
     }
 
 

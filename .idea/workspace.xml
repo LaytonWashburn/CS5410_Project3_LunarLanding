@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Momentum and rotation working. Starting work on particle system.">
+    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Saving work for the night.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StarterProject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StarterProject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ecs/Components/KeyboardControlled.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Components/KeyboardControlled.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ecs/Systems/Collision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/Collision.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ecs/Systems/KeyboardInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/KeyboardInput.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ecs/Systems/Movement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/Movement.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,7 +199,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741148881166</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Saving work for the night.">
+      <option name="closed" value="true" />
+      <created>1741157948260</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1741157948260</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -214,7 +223,8 @@
     <MESSAGE value="Saving work for the night. Rough audio, need new files or figure out a different way, doesn't sound good." />
     <MESSAGE value="Saving work on terrain" />
     <MESSAGE value="Momentum and rotation working. Starting work on particle system." />
-    <option name="LAST_COMMIT_MESSAGE" value="Momentum and rotation working. Starting work on particle system." />
+    <MESSAGE value="Saving work for the night." />
+    <option name="LAST_COMMIT_MESSAGE" value="Saving work for the night." />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

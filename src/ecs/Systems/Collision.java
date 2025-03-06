@@ -1,13 +1,9 @@
 package ecs.Systems;
-
-import ecs.Components.Movable;
+import ecs.Components.Level;
 import ecs.Components.Segments;
-import ecs.Direction;
 import ecs.Entities.Entity;
 import org.joml.Vector2f;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class Collision extends System {
@@ -34,70 +30,42 @@ public class Collision extends System {
     @Override
     public void update(double elapsedTime) {
 
-        var movable = findMovable(entities);
+        Entity lunarLander = findMovable(entities);
+        Entity spaceship = null;
 
-        ecs.Entities.Entity spaceship = null;
         // Iterate through all the entities
         for (var entity : entities.values()) {
-            // java.lang.System.out.println(entity);
-            // Iterate through the movable entities
-            for (var entityMovable : movable) {
-                // If the object collided, stop the lander
-                // Need some value to show that the ship exploded
-                if (entity != entityMovable && collides(entity, entityMovable)) { // entity is the terrain, entityMovable is the Lunar Lander
 
-                    // This seems like it's going to overwrite items
-                    // But we only have one lunar lander
-                    java.lang.System.out.println("In the update for the collision");
-                    spaceship = entityMovable;
-                }
+            if (entity != lunarLander && lunarLander.get(ecs.Components.LunarLander.class).alive && collides(entity, lunarLander)) { // entity is the terrain, lunarLander is the Lunar Lander
+
+                // This seems like it's going to overwrite items
+                // But we only have one lunar lander
+                java.lang.System.out.println("In the update for the collision");
+                spaceship = lunarLander;
             }
 
         }
         // Remove the space
         if(spaceship != null){
             spaceShipRemoved.invoke(spaceship); // Remove the spaceship that's moveable
-            var lunarLander = spaceship.get(ecs.Components.LunarLander.class);
-            lunarLander.shipCrash = true;
+            lunarLander.get(ecs.Components.LunarLander.class).alive = false;
         }
 
-    }
-
-    /**
-     * Public method that allows an entity with a single cell position
-     * to be tested for collision with anything else in the game.
-     */
-    public boolean collidesWithAny(Entity proposed) {
-//        var aPosition = proposed.get(ecs.Components.Position.class);
-//
-//        for (var entity : entities.values()) {
-//            if (entity.contains(ecs.Components.Collision.class) && entity.contains(ecs.Components.Position.class)) {
-//                var ePosition = entity.get(ecs.Components.Position.class);
-//
-//                for (var segment : ePosition.segments) {
-//                    if (aPosition.getX() == segment.x && aPosition.getY() == segment.y) {
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
-
-        return false;
     }
 
     /**
      * Returns a collection of all the movable entities.
      */
-    private List<Entity> findMovable(Map<Long, Entity> entities) {
+    private Entity findMovable(Map<Long, Entity> entities) {
         var movable = new ArrayList<Entity>();
 
         for (var entity : entities.values()) {
-            if (entity.contains(ecs.Components.Movable.class) && entity.contains(ecs.Components.Position.class)) {
+            if (entity.contains(ecs.Components.Movable.class) && entity.contains(ecs.Components.LunarLander.class) ) {
                 movable.add(entity);
             }
         }
 
-        return movable;
+        return movable.getFirst();
     }
 
     /**
@@ -108,9 +76,10 @@ public class Collision extends System {
      */
     private boolean collides(Entity a, Entity b) { // a is terrain, b is the lunar lander
 
+
         var spaceShipCoordinates = b.get(ecs.Components.Position.class); // Get the position of the lunar lander
         var segments = a.get(Segments.class); // Get the segments from the terrain
-        // var movable = b.get(ecs.Components.Movable.class);
+        var lunarLanderKeyBoardControlled = b.get(ecs.Components.KeyboardControlled.class);
 
         for(Segments.Segment segment: segments.getSegments()){ // Iterate through the segments
 
@@ -121,11 +90,14 @@ public class Collision extends System {
                     0.07f);
 
             if( collision && !segment.safeZone){
+                lunarLanderKeyBoardControlled.enabled = false;
                 return true; // Return true for a collision
             }
 
-            // This is where the check for the speed and angle need to be
-            // if (collision) {}
+             // This is where the check for the speed and angle need to be
+              if (collision && segment.safeZone) {
+                  lunarLanderKeyBoardControlled.enabled = false;
+              }
         }
         return false; // Return false if no collision
     }
