@@ -27,6 +27,10 @@ public class Segments extends Component {
         segments = new ArrayList<>();
     }
 
+    public void reset(){
+        segments = new ArrayList<>();
+    }
+
     public ArrayList<Segment> getSegments() {
         return this.segments;
     }

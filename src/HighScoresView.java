@@ -4,16 +4,21 @@ import edu.usu.graphics.Graphics2D;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import utils.Serializer;
+import utils.Serializer.*;
+import utils.GameState.*;
+
 public class HighScoresView extends GameStateView {
 
     private KeyboardInput inputKeyboard;
     private GameStateEnum nextGameState = GameStateEnum.HighScores;
     private Font font;
+    Serializer serializer;
 
     @Override
     public void initialize(Graphics2D graphics) {
         super.initialize(graphics);
-
+        this.serializer = new Serializer();
         font = new Font("resources/fonts/Roboto-Regular.ttf", 48, false);
 
         inputKeyboard = new KeyboardInput(graphics.getWindow());

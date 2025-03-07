@@ -24,8 +24,8 @@ public class Movement extends System {
 
     // Move the lunar lander
     public Vector2f thrust(Vector2f momentum, double angle, double elapsedTime){
-        Vector2f thrust = new Vector2f((float) -Math.sin(angle), (float) Math.cos(angle));
-        thrust = thrust.mul((float) elapsedTime);
+        Vector2f thrust = new Vector2f((float) -Math.sin(angle), (float) Math.cos(angle)); // Direction
+        thrust = thrust.mul((float) elapsedTime).mul(0.5f); // Scalar to adjust thrust
         thrust = thrust.add(momentum);
         return thrust;
     }
@@ -44,7 +44,7 @@ public class Movement extends System {
         var keyboard = entity.get(ecs.Components.KeyboardControlled.class);
 
         if(keyboard.enabled){
-            lunarLander.momentum.y += gravity.gravity.y * (float)elapsedTime;
+            lunarLander.momentum.y += gravity.gravity.y * (float)elapsedTime; // Apply the gravity
 
             if (Objects.requireNonNull(moveable.moving) == Direction.Up) {
 

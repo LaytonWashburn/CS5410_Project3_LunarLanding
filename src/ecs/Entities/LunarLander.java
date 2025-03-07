@@ -26,7 +26,7 @@ public class LunarLander {
         lunarLander.add(new ecs.Components.Rotatable(rotation));
         lunarLander.add(new Particles(new Vector2f(0, 0),
                                                 0.015f, 0.004f,
-                                                0.07f, 0.05f,
+                0.07f, 0.05f,
                                                 3, 1));
         lunarLander.add(new ecs.Components.Movable(Direction.None, MOVE_INTERVAL));
         lunarLander.add(new ecs.Components.KeyboardControlled(

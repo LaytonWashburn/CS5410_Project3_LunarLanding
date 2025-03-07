@@ -15,13 +15,6 @@ public class GamePlayView extends GameStateView {
 
     private GameModel gameModel;
 
-    // Current Game Level
-    private enum GameLevel {
-        LEVEL_1,
-        LEVEL_2;
-    }
-
-    GameLevel currentLevel;
 
     @Override
     public void initialize(Graphics2D graphics) {
@@ -35,11 +28,6 @@ public class GamePlayView extends GameStateView {
         inputKeyboard.registerCommand(GLFW_KEY_ESCAPE, true, (double elapsedTime) -> {
             nextGameState = GameStateEnum.MainMenu;
         });
-
-
-
-        currentLevel = GameLevel.LEVEL_1; // Set the current game level
-
 
     }
 

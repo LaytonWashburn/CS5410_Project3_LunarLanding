@@ -2,6 +2,7 @@
   <library name="lwjgl-lib">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/lwjgl-lib" />
+      <root url="jar://$PROJECT_DIR$/google/gson-2.10.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

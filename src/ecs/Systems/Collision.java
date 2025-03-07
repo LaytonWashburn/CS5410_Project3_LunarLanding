@@ -45,6 +45,7 @@ public class Collision extends System {
             }
 
         }
+
         // Remove the space
         if(spaceship != null){
             spaceShipRemoved.invoke(spaceship); // Remove the spaceship that's moveable

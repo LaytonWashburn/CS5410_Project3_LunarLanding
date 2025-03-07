@@ -1,16 +1,29 @@
 import ecs.Entities.*;
 import ecs.Entities.LunarLander;
-import ecs.GameState;
 import ecs.Systems.*;
 import ecs.Systems.KeyboardInput;
 import edu.usu.audio.Sound;
 import edu.usu.audio.SoundManager;
 import edu.usu.graphics.*;
 import org.joml.Vector3f;
+
+import java.lang.System;
 import java.util.ArrayList;
 import java.util.List;
 import ecs.Components.Segments.Segment;
 public class GameModel {
+
+
+    // Only the GameModel should know what level we're on
+    // The Game Model coordinates systems
+    /*
+        Game Model requests the terrain to be rendered
+        None of the systems should know what the level is
+        Start with the terrain generation
+        Count down system
+            lambda
+
+     */
 
     // Enum for what level the game is currently on
     public enum LEVEL{
@@ -23,7 +36,6 @@ public class GameModel {
     // Globals
 
     private LEVEL gameLevel;
-    private GameState gameState;
     private final List<Entity> removeThese = new ArrayList<>();
     private final List<Entity> addThese = new ArrayList<>();
 
@@ -61,7 +73,6 @@ public class GameModel {
         crash = audio.load("crash", "resources/audio/crash.ogg", false);
 
         gameLevel = LEVEL.TWO; // Set the game level, by default make it level ONE
-        gameState = new GameState();
 
         sysCollision = new Collision((Entity entity) -> {
             // removeEntity(entity); // Save callback state for when the spaceship needs to get removed
@@ -75,6 +86,7 @@ public class GameModel {
         sysRotation = new Rotation();
         sysParticleSystem = new ParticleRenderer(graphics, texParticle); // Particle system
         sysLevels = new Levels(graphics, fontHeadsUpDisplay);
+
         initializeTerrain();
         initializeSpaceShip(texSpaceShip);
 
@@ -134,11 +146,11 @@ public class GameModel {
         sysLevels.remove(entity.getId());
     }
 
-
-
-
     private void initializeTerrain(){ // Texture triangle
-        addEntity(Terrain.create());
+        System.out.println("Initializing the terrain");
+        Entity terrain = Terrain.create();
+        System.out.printf("Initializing the terrain %d", terrain.getId());
+        addEntity(terrain);
     }
 
     // Initialize the Lunar Lander
