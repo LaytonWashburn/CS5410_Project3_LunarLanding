@@ -31,26 +31,27 @@ public class Collision extends System {
     public void update(double elapsedTime) {
 
         Entity lunarLander = findMovable(entities);
-        Entity spaceship = null;
+        // Entity spaceship = null;
 
         // Iterate through all the entities
         for (var entity : entities.values()) {
 
-            if (entity != lunarLander && lunarLander.get(ecs.Components.LunarLander.class).alive && collides(entity, lunarLander)) { // entity is the terrain, lunarLander is the Lunar Lander
 
+            if (entity != lunarLander) { // entity is the terrain, lunarLander is the Lunar Lander
+                collides(entity, lunarLander);
                 // This seems like it's going to overwrite items
                 // But we only have one lunar lander
-                java.lang.System.out.println("In the update for the collision");
-                spaceship = lunarLander;
+
+                // spaceship = lunarLander;
             }
 
         }
 
-        // Remove the space
-        if(spaceship != null){
-            spaceShipRemoved.invoke(spaceship); // Remove the spaceship that's moveable
-            lunarLander.get(ecs.Components.LunarLander.class).alive = false;
-        }
+//        // Remove the space
+//        if(spaceship != null){
+//            spaceShipRemoved.invoke(spaceship); // Remove the spaceship that's moveable
+//            lunarLander.get(ecs.Components.LunarLander.class).alive = false;
+//        }
 
     }
 
@@ -75,12 +76,14 @@ public class Collision extends System {
      * don't need to look at all the segments in the position, with the
      * exception of the movable itself...a movable can collide with itself.
      */
-    private boolean collides(Entity a, Entity b) { // a is terrain, b is the lunar lander
+    private void collides(Entity a, Entity b) { // a is terrain, b is the lunar lander
 
 
         var spaceShipCoordinates = b.get(ecs.Components.Position.class); // Get the position of the lunar lander
         var segments = a.get(Segments.class); // Get the segments from the terrain
         var lunarLanderKeyBoardControlled = b.get(ecs.Components.KeyboardControlled.class);
+        var lunarLander = b.get(ecs.Components.LunarLander.class);
+        var rotatable = b.get(ecs.Components.Rotatable.class);
 
         for(Segments.Segment segment: segments.getSegments()){ // Iterate through the segments
 
@@ -92,15 +95,24 @@ public class Collision extends System {
 
             if( collision && !segment.safeZone){
                 lunarLanderKeyBoardControlled.enabled = false;
-                return true; // Return true for a collision
+                lunarLander.alive = false;
+                rotatable.isRotating = false;
             }
 
              // This is where the check for the speed and angle need to be
-              if (collision && segment.safeZone) {
+              if (collision && segment.safeZone ) {
+                  double angle = (Math.abs(rotatable.getRotation() * 180 / Math.PI));
+                  if(angle <= 5 || angle >= 355){
+                      lunarLander.alive = true;
+                  } else {
+                      lunarLander.alive = false;
+                  }
                   lunarLanderKeyBoardControlled.enabled = false;
+                  rotatable.isRotating = false;
+
               }
         }
-        return false; // Return false if no collision
+
     }
 
     // I (Dean) wrote this for use in my Java implementation of the game.

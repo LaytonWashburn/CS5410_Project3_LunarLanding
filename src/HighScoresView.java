@@ -4,6 +4,7 @@ import edu.usu.graphics.Graphics2D;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import utils.GameState;
 import utils.Serializer;
 import utils.Serializer.*;
 import utils.GameState.*;
@@ -51,5 +52,7 @@ public class HighScoresView extends GameStateView {
         final float width = font.measureTextWidth(message, height);
 
         graphics.drawTextByHeight(font, message, 0.0f - width / 2, 0 - height / 2, height, Color.YELLOW);
+        GameState[] states = serializer.loadSomething();
+        System.out.println(states);
     }
 }
