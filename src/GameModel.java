@@ -85,7 +85,6 @@ public class GameModel {
 
         sysKeyboardInput = new KeyboardInput(graphics.getWindow(), (Entity entity) -> {
             if(!keyBoardPause){
-                System.out.println("Hello from lambda");
                 addEntity(entity);
                 keyBoardPause = true;
             }

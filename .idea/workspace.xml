@@ -4,17 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Rotation working right.">
+    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Pause ui rough working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GamePlayView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GamePlayView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ecs/Components/KeyboardControlled.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Components/KeyboardControlled.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ecs/Components/Movable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Components/Movable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ecs/Systems/Collision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/Collision.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ecs/Systems/KeyboardInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/KeyboardInput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ecs/Systems/Movement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/Movement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ecs/Systems/System.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/System.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,7 +228,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741376510589</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Pause ui rough working">
+      <option name="closed" value="true" />
+      <created>1741413983059</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1741413983059</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -256,7 +257,8 @@
     <MESSAGE value="This is getting messy" />
     <MESSAGE value="Particle system working" />
     <MESSAGE value="Rotation working right." />
-    <option name="LAST_COMMIT_MESSAGE" value="Rotation working right." />
+    <MESSAGE value="Pause ui rough working" />
+    <option name="LAST_COMMIT_MESSAGE" value="Pause ui rough working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
