@@ -41,7 +41,7 @@ public class HelpView extends GameStateView {
 
     @Override
     public void render(double elapsedTime) {
-        final String message = "This is how to play the game";
+        final String message = "Thrust: Up arrow, Rotate left: Left arrow, Rotate right: Right arrow";
         final float height = 0.075f;
         final float width = font.measureTextWidth(message, height);
 

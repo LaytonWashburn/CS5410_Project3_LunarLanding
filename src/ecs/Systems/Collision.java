@@ -24,27 +24,15 @@ public class Collision extends System {
     public void update(double elapsedTime) {
 
         Entity lunarLander = findMovable(entities);
-        // Entity spaceship = null;
 
         // Iterate through all the entities
         for (var entity : entities.values()) {
 
-
             if (entity != lunarLander) { // entity is the terrain, lunarLander is the Lunar Lander
                 collides(entity, lunarLander);
-                // This seems like it's going to overwrite items
-                // But we only have one lunar lander
-
-                // spaceship = lunarLander;
             }
 
         }
-
-//        // Remove the space
-//        if(spaceship != null){
-//            spaceShipRemoved.invoke(spaceship); // Remove the spaceship that's moveable
-//            lunarLander.get(ecs.Components.LunarLander.class).alive = false;
-//        }
 
     }
 
@@ -71,12 +59,12 @@ public class Collision extends System {
      */
     private void collides(Entity a, Entity b) { // a is terrain, b is the lunar lander
 
-
         var spaceShipCoordinates = b.get(ecs.Components.Position.class); // Get the position of the lunar lander
         var segments = a.get(Segments.class); // Get the segments from the terrain
         var lunarLanderKeyBoardControlled = b.get(ecs.Components.KeyboardControlled.class);
         var lunarLander = b.get(ecs.Components.LunarLander.class);
         var rotatable = b.get(ecs.Components.Rotatable.class);
+        var sounds = b.get(ecs.Components.Sounds.class);
 
         for(Segments.Segment segment: segments.getSegments()){ // Iterate through the segments
 
@@ -86,19 +74,24 @@ public class Collision extends System {
                     new Vector2f(spaceShipCoordinates.getPosX() + 0.1f, spaceShipCoordinates.getPosY() + 0.1f), // I don't like having hard coded values in here
                     0.07f);
 
-            if( collision && !segment.safeZone){
+            if( collision && !segment.safeZone && lunarLander.alive){
                 lunarLanderKeyBoardControlled.enabled = false;
                 lunarLander.alive = false;
                 rotatable.isRotating = false;
+                sounds.playCrash();
             }
 
              // This is where the check for the speed and angle need to be
-              if (collision && segment.safeZone ) {
+              if (collision && segment.safeZone && lunarLander.alive) {
                   double angle = (Math.abs(rotatable.getRotation() * 180 / Math.PI));
-                  if(angle <= 5 || angle >= 355){
+                  double speed = Math.sqrt((lunarLander.momentum.x * lunarLander.momentum.x) + (lunarLander.momentum.y * lunarLander.momentum.y)) * 2000;
+                  if((angle <= 5 || angle >= 355) && speed <= 2.2f){
                       lunarLander.alive = true;
                   } else {
                       lunarLander.alive = false;
+                      sounds.playCrash();
+                      java.lang.System.out.println(speed);
+                      java.lang.System.out.println(angle);
                   }
                   lunarLanderKeyBoardControlled.enabled = false;
                   rotatable.isRotating = false;

@@ -41,10 +41,27 @@ public class AboutView extends GameStateView {
 
     @Override
     public void render(double elapsedTime) {
-        final String message = "*I* wrote this amazing game!";
+        final String message1 = "Welcome to the Lunar Lander!.";
+        final String message2 = "The goal of this game is to safely land the Lunar Lander";
+        final String message3 = "Get the Heads Up Display to show all green to land safely";
+        final String message4 = "Use the left and right arrow keys to rotate the lander";
+        final String message5 = "Use up arrow for thrust";
+        final String message6 = "Good Luck!";
         final float height = 0.075f;
-        final float width = font.measureTextWidth(message, height);
+        final float width = font.measureTextWidth(message1, height);
 
-        graphics.drawTextByHeight(font, message, 0.0f - width / 2, 0 - height / 2, height, Color.YELLOW);
+        graphics.drawTextByHeight(font, message1, -0.75f, -0.75f, height, Color.YELLOW);
+
+        float top = -0.5f;
+        top = drawMessage(message2, -0.75f, top, height);
+        top = drawMessage(message3, -0.75f, top, height);
+        top = drawMessage(message4, -0.75f, top, height);
+        top = drawMessage(message5, -0.75f, top, height);
+        drawMessage(message6, -0.75f, 0.25f, height);
+    }
+
+    public float drawMessage(String message, float left, float top, float height){
+        graphics.drawTextByHeight(font, message, left, top, height, Color.YELLOW);
+        return top  + height;
     }
 }

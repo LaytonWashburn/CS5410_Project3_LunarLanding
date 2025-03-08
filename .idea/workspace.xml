@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Loading high scores works. Need to revise.">
+    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Scores persisting">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AboutView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AboutView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ControlsView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlsView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GamePlayView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GamePlayView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HighScoresView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HighScoresView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HelpView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HelpView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StarterProject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LunarLander.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Entities/LunarLander.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ecs/Systems/Collision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/Collision.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ecs/Systems/Movement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ecs/Systems/Movement.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,7 +61,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/layto/USU/CS5410/ClassNotes/Serialization/Serialization",
+    "last_opened_file_path": "C:/Users/layto/USU/CS5410/ClassNotes/Simple - Audio/Simple - Audio",
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -76,14 +78,14 @@
   </component>
   <component name="RunManager" selected="Application.Driver - Windows/Linux">
     <configuration name="Driver - Windows/Linux" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="StarterProject" />
+      <option name="MAIN_CLASS_NAME" value="LunarLander" />
       <module name="LunarLander" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="Driver - macOS" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="StarterProject" />
+      <option name="MAIN_CLASS_NAME" value="LunarLander" />
       <module name="LunarLander" />
       <option name="VM_PARAMETERS" value="-XstartOnFirstThread" />
       <method v="2">
@@ -256,8 +258,27 @@
       <option name="project" value="LOCAL" />
       <updated>1741464592565</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Scores persisting">
+      <option name="closed" value="true" />
+      <created>1741469180416</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1741469180416</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Saving work, ecs set up and rough terrain system. Need to randomize the terrain and make safe zones." />
@@ -279,7 +300,8 @@
     <MESSAGE value="Pause ui rough working" />
     <MESSAGE value="Saving work" />
     <MESSAGE value="Loading high scores works. Need to revise." />
-    <option name="LAST_COMMIT_MESSAGE" value="Loading high scores works. Need to revise." />
+    <MESSAGE value="Scores persisting" />
+    <option name="LAST_COMMIT_MESSAGE" value="Scores persisting" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

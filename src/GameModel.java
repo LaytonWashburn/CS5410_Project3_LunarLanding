@@ -12,20 +12,16 @@ import utils.Serializer;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class GameModel {
-
-
-    // Only the GameModel should know what level we're on
-    // The Game Model coordinates systems
+// Only the GameModel should know what level we're on
+// The Game Model coordinates systems
     /*
         Game Model requests the terrain to be rendered
         None of the systems should know what the level is
         Start with the terrain generation
         Count down system
             lambda
-
      */
+public class GameModel {
 
     // Enum for what level the game is currently on
     public enum LEVEL{
@@ -63,6 +59,7 @@ public class GameModel {
     private SoundManager audio;
     private Sound crash;
     private Sound thrust;
+    private Sound completion;
 
     private KeyboardInput inputKeyboard;
     private boolean keyBoardPause;
@@ -86,6 +83,7 @@ public class GameModel {
         audio = new SoundManager();
         thrust = audio.load("thrust", "resources/audio/thrust.ogg", false);
         crash = audio.load("crash", "resources/audio/crash.ogg", false);
+        completion = audio.load("completion", "resources/audio/completion.ogg", false);
 
         gameLevel = LEVEL.TWO; // Set the game level, by default make it level ONE
 
@@ -183,7 +181,7 @@ public class GameModel {
     // Initialize the Lunar Lander
     private void initializeSpaceShip(Texture texSpaceship){
         // Initialize the spaceship and rotate it on it's side
-        addEntity(LunarLander.create(texSpaceship, 0.0f, -0.5f, (0.5f * (float)Math.PI), thrust, crash));
+        addEntity(LunarLander.create(texSpaceship, 0.0f, -0.5f, (0.5f * (float)Math.PI), thrust, crash, completion));
     }
 
 }

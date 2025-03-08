@@ -64,22 +64,11 @@ public class ControlsView extends GameStateView {
 
         // Arrow keys to navigate the menu
         inputKeyboard.registerCommand(GLFW_KEY_UP, true, (double elapsedTime) -> {
-            System.out.println("UP");
             currentState = currentState.previous();
         });
 
         inputKeyboard.registerCommand(GLFW_KEY_DOWN, true, (double elapsedTime) -> {
             currentState = currentState.next();
-        });
-
-        // When Enter is pressed, set the appropriate new game state
-        inputKeyboard.registerCommand(GLFW_KEY_ENTER, true, (double elapsedTime) -> {
-            if(access > 0) {
-                setNewConfigurationKey = true;
-
-                System.out.println("Waiting");
-            }
-            access++;
         });
 
         // When ESC is pressed, set the appropriate new game state
@@ -97,11 +86,6 @@ public class ControlsView extends GameStateView {
 
     @Override
     public GameStateEnum processInput(double elapsedTime) {
-
-        System.out.println("Here is: " + GLFW_PRESS);
-        if(setNewConfigurationKey){
-            setNewConfigurationKey = false;
-        }
 
         // Updating the keyboard can change the nextGameState
         inputKeyboard.update(elapsedTime);
@@ -124,18 +108,9 @@ public class ControlsView extends GameStateView {
         final float HEIGHT_MENU_ITEM = 0.075f;
         float top = -0.25f;
 
-        top = renderMenuItem(currentState == ControlState.ROTATE_LEFT ? fontSelected : font, "Rotate Left -> " + this.controlMap.get(ControlState.ROTATE_LEFT), top, HEIGHT_MENU_ITEM, currentState == ControlState.ROTATE_LEFT ? Color.YELLOW : Color.BLUE);
-        top = renderMenuItem(currentState == ControlState.ROTATE_RIGHT ? fontSelected : font, "Rotate Right -> " + this.controlMap.get(ControlState.ROTATE_RIGHT), top, HEIGHT_MENU_ITEM, currentState == ControlState.ROTATE_RIGHT ? Color.YELLOW : Color.BLUE);
-        renderMenuItem(currentState == ControlState.THRUST ? fontSelected : font, "Thrust -> " + this.controlMap.get(ControlState.THRUST), top, HEIGHT_MENU_ITEM, currentState == ControlState.THRUST ? Color.YELLOW : Color.BLUE);
-
-
-        if(setNewConfigurationKey){
-            renderMenuItem(fontSelected,
-                    "Setting new key: " + this.controlMap.get(currentState),
-                    0.6f,
-                    HEIGHT_MENU_ITEM,
-                    Color.RED);
-        }
+        top = renderMenuItem(currentState == ControlState.ROTATE_LEFT ? fontSelected : font, "Rotate Left : Left Arrow ", top, HEIGHT_MENU_ITEM, currentState == ControlState.ROTATE_LEFT ? Color.YELLOW : Color.BLUE);
+        top = renderMenuItem(currentState == ControlState.ROTATE_RIGHT ? fontSelected : font, "Rotate Right : Right Arrow", top, HEIGHT_MENU_ITEM, currentState == ControlState.ROTATE_RIGHT ? Color.YELLOW : Color.BLUE);
+        renderMenuItem(currentState == ControlState.THRUST ? fontSelected : font, "Thrust : Up Arrow", top, HEIGHT_MENU_ITEM, currentState == ControlState.THRUST ? Color.YELLOW : Color.BLUE);
 
     }
 

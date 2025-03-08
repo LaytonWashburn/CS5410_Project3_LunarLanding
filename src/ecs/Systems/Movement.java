@@ -92,9 +92,9 @@ public class Movement extends System {
         if(keyboard.enabled){
             lunarLander.momentum.y += gravity.gravity.y * (float)elapsedTime; // Apply the gravity
 
-            if (Objects.requireNonNull(moveable.moving) == States.Up) {
+            if (Objects.requireNonNull(moveable.moving) == States.Up && lunarLander.fuel > 0) {
                 score.score -= 5; // Every time the lander has to thrust subtract 5
-                lunarLander.fuel -= 0.01; // Adjust the amount of fuel on the lunar lander
+                lunarLander.fuel -= 0.05; // Adjust the amount of fuel on the lunar lander
                 lunarLander.momentum = lunarLander.momentum.sub(thrust(lunarLander.momentum, rotatable.getRotation(), elapsedTime).mul((float)elapsedTime));
             }
 

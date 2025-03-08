@@ -13,7 +13,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 
 public class LunarLander {
 
-    public static Entity create(Texture texSpaceShip, float x, float y, float rotation, Sound thrust, Sound crash) {
+    public static Entity create(Texture texSpaceShip, float x, float y, float rotation, Sound thrust, Sound crash, Sound completion) {
         final double MOVE_INTERVAL = .150; // seconds
 
         var lunarLander = new Entity();
@@ -36,7 +36,7 @@ public class LunarLander {
                         GLFW_KEY_UP, States.Up,
                         GLFW_KEY_ESCAPE, States.PAUSE
                 )));
-        lunarLander.add(new ecs.Components.Sounds(thrust, crash));
+        lunarLander.add(new ecs.Components.Sounds(thrust, crash, completion));
         lunarLander.add(new ecs.Components.Level());
         lunarLander.add(new ecs.Components.Score());
         return lunarLander;
