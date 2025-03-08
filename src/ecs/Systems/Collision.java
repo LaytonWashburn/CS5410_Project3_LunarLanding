@@ -8,16 +8,9 @@ import java.util.Map;
 
 public class Collision extends System {
 
-    public interface IspaceShipRemoved {
-        void invoke(Entity entity);
-    }
 
-    private final IspaceShipRemoved spaceShipRemoved;
-
-    public Collision(IspaceShipRemoved spaceShipRemoved) {
+    public Collision() {
         super(ecs.Components.Collision.class);
-
-        this.spaceShipRemoved = spaceShipRemoved;
     }
 
     /**

@@ -1,15 +1,15 @@
 package ecs.Components;
 
-import ecs.Direction;
+import ecs.States;
 
 public class Movable extends Component {
 
 
-    public Direction moving;
+    public States moving;
     public double moveInterval; // seconds
     public double elapsedInterval;
 
-    public Movable(Direction moving, double moveInterval) {
+    public Movable(States moving, double moveInterval) {
         this.moving = moving;
         this.moveInterval =moveInterval;
     }

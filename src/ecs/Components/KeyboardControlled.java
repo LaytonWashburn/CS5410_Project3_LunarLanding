@@ -1,15 +1,15 @@
 package ecs.Components;
-import ecs.Direction;
+import ecs.States;
 import java.util.HashMap;
 import java.util.Map;
 
 public class KeyboardControlled extends Component {
-    public Map<Integer, Direction> keys;
-    public Map<Direction, Integer> lookup;
+    public Map<Integer, States> keys;
+    public Map<States, Integer> lookup;
 
     public boolean enabled;
 
-    public KeyboardControlled(Map<Integer, Direction> keys) {
+    public KeyboardControlled(Map<Integer, States> keys) {
         this.keys = keys;
 
         // Build the action to key lookup based on the key to action inf

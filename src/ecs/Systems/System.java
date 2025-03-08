@@ -36,6 +36,7 @@ public abstract class System {
 
         return true;
     }
+    
 
     /**
      * If the system is interested in the entity, it is added to the tracking collection

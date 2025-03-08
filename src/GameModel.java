@@ -2,15 +2,15 @@ import ecs.Entities.*;
 import ecs.Entities.LunarLander;
 import ecs.Systems.*;
 import ecs.Systems.KeyboardInput;
+import ecs.Systems.Pause;
 import edu.usu.audio.Sound;
 import edu.usu.audio.SoundManager;
 import edu.usu.graphics.*;
-import org.joml.Vector3f;
-
 import java.lang.System;
 import java.util.ArrayList;
 import java.util.List;
-import ecs.Components.Segments.Segment;
+
+
 public class GameModel {
 
 
@@ -50,6 +50,7 @@ public class GameModel {
     private ecs.Systems.Rotation sysRotation;
     private ecs.Systems.ParticleRenderer sysParticleSystem;
     private ecs.Systems.Levels sysLevels;
+    private ecs.Systems.Pause sysPause;
 
     // Textures
     Texture texSpaceShip;
@@ -61,8 +62,12 @@ public class GameModel {
     private Sound crash;
     private Sound thrust;
 
+    private KeyboardInput inputKeyboard;
+    private boolean keyBoardPause;
+
     public void initialize(Graphics2D graphics) {
 
+        keyBoardPause = false;
         texSpaceShip = new Texture("resources/characters/lander.png");
         texBackground = new Texture("resources/images/background.png");
         texParticle = new Texture("resources/images/smoke.png");
@@ -74,11 +79,18 @@ public class GameModel {
 
         gameLevel = LEVEL.TWO; // Set the game level, by default make it level ONE
 
-        sysCollision = new Collision((Entity entity) -> {
-            // removeEntity(entity); // Save callback state for when the spaceship needs to get removed
-        });
+        sysCollision = new Collision();
+
         sysMovement = new Movement(); // Movement System
-        sysKeyboardInput = new KeyboardInput(graphics.getWindow()); // KeyboardInput System
+
+        sysKeyboardInput = new KeyboardInput(graphics.getWindow(), (Entity entity) -> {
+            if(!keyBoardPause){
+                System.out.println("Hello from lambda");
+                addEntity(entity);
+                keyBoardPause = true;
+            }
+        }); // KeyboardInput System
+
         sysBackGroundRenderer = new BackgroundRenderer(graphics, texBackground);
         sysTerrainRenderer = new TerrainRenderer(graphics); // TerrainRenderer System
         sysLunarLanderRenderer = new LunarLanderRenderer(graphics); //
@@ -86,6 +98,11 @@ public class GameModel {
         sysRotation = new Rotation();
         sysParticleSystem = new ParticleRenderer(graphics, texParticle); // Particle system
         sysLevels = new Levels(graphics, fontHeadsUpDisplay);
+        sysPause = new Pause(graphics, graphics.getWindow(), (Entity entity) -> {
+            // DO SOMETHING
+            removeEntity(entity);
+            keyBoardPause = false;
+        });
 
         initializeTerrain();
         initializeSpaceShip(texSpaceShip);
@@ -118,6 +135,7 @@ public class GameModel {
         sysRotation.update(elapsedTime); // Update the rotation
         sysParticleSystem.update(elapsedTime);
         sysLevels.update(elapsedTime);
+        sysPause.update((elapsedTime));
     }
 
     private void addEntity(Entity entity) {
@@ -131,6 +149,7 @@ public class GameModel {
         sysHeadsUpDisplayRenderer.add(entity);
         sysParticleSystem.add(entity);
         sysLevels.add(entity);
+        sysPause.add(entity);
     }
 
     private void removeEntity(Entity entity) {
@@ -144,13 +163,11 @@ public class GameModel {
         sysHeadsUpDisplayRenderer.remove(entity.getId());
         sysParticleSystem.remove(entity.getId());
         sysLevels.remove(entity.getId());
+        sysPause.remove(entity.getId());
     }
 
     private void initializeTerrain(){ // Texture triangle
-        System.out.println("Initializing the terrain");
-        Entity terrain = Terrain.create();
-        System.out.printf("Initializing the terrain %d", terrain.getId());
-        addEntity(terrain);
+        addEntity(Terrain.create());
     }
 
     // Initialize the Lunar Lander

@@ -1,6 +1,6 @@
 package ecs.Entities;
 import ecs.Components.Particles;
-import ecs.Direction;
+import ecs.States;
 import edu.usu.audio.Sound;
 import edu.usu.graphics.Color;
 import edu.usu.graphics.Texture;
@@ -28,12 +28,13 @@ public class LunarLander {
                                                 0.015f, 0.004f,
                 0.07f, 0.05f,
                                                 3, 1));
-        lunarLander.add(new ecs.Components.Movable(Direction.None, MOVE_INTERVAL));
+        lunarLander.add(new ecs.Components.Movable(States.None, MOVE_INTERVAL));
         lunarLander.add(new ecs.Components.KeyboardControlled(
                 Map.of(
-                        GLFW_KEY_LEFT, Direction.Left,
-                        GLFW_KEY_RIGHT, Direction.Right,
-                        GLFW_KEY_UP, Direction.Up
+                        GLFW_KEY_LEFT, States.Left,
+                        GLFW_KEY_RIGHT, States.Right,
+                        GLFW_KEY_UP, States.Up,
+                        GLFW_KEY_ESCAPE, States.PAUSE
                 )));
         lunarLander.add(new ecs.Components.Sounds(thrust, crash));
         lunarLander.add(new ecs.Components.Level());
