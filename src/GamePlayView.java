@@ -54,16 +54,5 @@ public class GamePlayView extends GameStateView {
 
 
     @Override
-    public void render(double elapsedTime) {
-//        final String message = "Isn't this game fun!";
-//        final float height = 0.075f;
-//        final float width = font.measureTextWidth(message, height);
-//
-//
-//        for(int position = 0; position < this.points.size()-1; position++){
-//            graphics.draw(this.points.get(position), this.points.get(position+1), Color.RED);
-//        }
-//
-//        graphics.drawTextByHeight(font, message, 0.0f - width / 2, 0 - height / 2, height, Color.YELLOW);
-    }
+    public void render(double elapsedTime) {}
 }

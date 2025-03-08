@@ -12,20 +12,27 @@ public class Game {
     private IGameState currentState;
     GameStateEnum nextStateEnum = GameStateEnum.MainMenu;
     GameStateEnum prevStateEnum = GameStateEnum.MainMenu;
-
+    public Serializer serializer;
+    public GameScores gameScores;
 
     public Game(Graphics2D graphics) {
+
         this.graphics = graphics;
+        this.gameScores = new GameScores();
     }
 
     public void initialize() {
+
+        serializer = new Serializer();
 
         // Map the states to the views
         states = new HashMap<>() {
             {
                 put(GameStateEnum.MainMenu, new MainMenuView());
                 put(GameStateEnum.GamePlay, new GamePlayView());
-                put(GameStateEnum.HighScores, new HighScoresView());
+
+                put(GameStateEnum.HighScores, new HighScoresView(serializer, gameScores));
+
                 put(GameStateEnum.Controls, new ControlsView());
                 put(GameStateEnum.Help, new HelpView());
                 put(GameStateEnum.About, new AboutView());
@@ -37,6 +44,7 @@ public class Game {
             state.initialize(graphics);
         }
 
+
         currentState = states.get(GameStateEnum.MainMenu);
         currentState.initializeSession();
 
@@ -44,6 +52,7 @@ public class Game {
     }
 
     public void shutdown() {
+        this.serializer.shutdown();
     }
 
     public void run() {

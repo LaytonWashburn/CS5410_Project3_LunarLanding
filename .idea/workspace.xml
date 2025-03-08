@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Pause ui rough working">
+    <list default="true" id="8858ee06-ea5c-4baa-8898-f17b08ca1729" name="Changes" comment="Saving work">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GamePlayView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GamePlayView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HighScoresView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HighScoresView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +56,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/layto/USU/CS5410/ClassNotes/ECS - Snake Game/ECS - Snake Game",
+    "last_opened_file_path": "C:/Users/layto/USU/CS5410/ClassNotes/Serialization/Serialization",
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -236,12 +237,19 @@
       <option name="project" value="LOCAL" />
       <updated>1741413983059</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Saving work">
+      <option name="closed" value="true" />
+      <created>1741417009274</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1741417009274</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Saving work, ecs set up and rough terrain system. Need to randomize the terrain and make safe zones." />
-    <MESSAGE value="Saving work" />
     <MESSAGE value="Spaceship and terrain rendering correctly." />
     <MESSAGE value="Got a rough version of rotation working. Need to start working on thrust." />
     <MESSAGE value="Got the ship movement in a rough working state." />
@@ -258,7 +266,8 @@
     <MESSAGE value="Particle system working" />
     <MESSAGE value="Rotation working right." />
     <MESSAGE value="Pause ui rough working" />
-    <option name="LAST_COMMIT_MESSAGE" value="Pause ui rough working" />
+    <MESSAGE value="Saving work" />
+    <option name="LAST_COMMIT_MESSAGE" value="Saving work" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -267,6 +276,11 @@
           <url>file://$PROJECT_DIR$/src/ecs/Systems/Movement.java</url>
           <line>57</line>
           <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Serializer.java</url>
+          <line>115</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
