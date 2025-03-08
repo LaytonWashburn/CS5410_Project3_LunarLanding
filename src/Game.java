@@ -1,5 +1,6 @@
 import edu.usu.graphics.*;
-import org.joml.Vector3f;
+import utils.GameScores;
+import utils.Serializer;
 
 import java.util.HashMap;
 
@@ -29,7 +30,7 @@ public class Game {
         states = new HashMap<>() {
             {
                 put(GameStateEnum.MainMenu, new MainMenuView());
-                put(GameStateEnum.GamePlay, new GamePlayView());
+                put(GameStateEnum.GamePlay, new GamePlayView(serializer, gameScores));
 
                 put(GameStateEnum.HighScores, new HighScoresView(serializer, gameScores));
 

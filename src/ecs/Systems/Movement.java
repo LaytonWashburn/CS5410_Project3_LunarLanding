@@ -87,12 +87,13 @@ public class Movement extends System {
         var gravity = entity.get(ecs.Components.Gravity.class);
         var rotatable = entity.get(ecs.Components.Rotatable.class);
         var keyboard = entity.get(ecs.Components.KeyboardControlled.class);
+        var score = entity.get(ecs.Components.Score.class);
 
         if(keyboard.enabled){
             lunarLander.momentum.y += gravity.gravity.y * (float)elapsedTime; // Apply the gravity
 
             if (Objects.requireNonNull(moveable.moving) == States.Up) {
-
+                score.score -= 5; // Every time the lander has to thrust subtract 5
                 lunarLander.fuel -= 0.01; // Adjust the amount of fuel on the lunar lander
                 lunarLander.momentum = lunarLander.momentum.sub(thrust(lunarLander.momentum, rotatable.getRotation(), elapsedTime).mul((float)elapsedTime));
             }

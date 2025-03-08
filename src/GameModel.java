@@ -6,7 +6,9 @@ import ecs.Systems.Pause;
 import edu.usu.audio.Sound;
 import edu.usu.audio.SoundManager;
 import edu.usu.graphics.*;
-import java.lang.System;
+import utils.GameScores;
+import utils.Serializer;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +67,14 @@ public class GameModel {
     private KeyboardInput inputKeyboard;
     private boolean keyBoardPause;
 
+    public Serializer serializer;
+    public GameScores gameScores;
+
+    public GameModel(Serializer serializer, GameScores gameScores){
+        this.serializer = serializer;
+        this.gameScores = gameScores;
+    }
+
     public void initialize(Graphics2D graphics) {
 
         keyBoardPause = false;
@@ -96,7 +106,8 @@ public class GameModel {
         sysHeadsUpDisplayRenderer = new HeadsUpDisplayRenderer(graphics, fontHeadsUpDisplay);
         sysRotation = new Rotation();
         sysParticleSystem = new ParticleRenderer(graphics, texParticle); // Particle system
-        sysLevels = new Levels(graphics, fontHeadsUpDisplay);
+        sysLevels = new Levels(graphics, fontHeadsUpDisplay, serializer, gameScores);
+
         sysPause = new Pause(graphics, graphics.getWindow(), (Entity entity) -> {
             // DO SOMETHING
             removeEntity(entity);

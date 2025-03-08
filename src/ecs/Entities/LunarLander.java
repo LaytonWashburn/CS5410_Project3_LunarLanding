@@ -38,6 +38,7 @@ public class LunarLander {
                 )));
         lunarLander.add(new ecs.Components.Sounds(thrust, crash));
         lunarLander.add(new ecs.Components.Level());
+        lunarLander.add(new ecs.Components.Score());
         return lunarLander;
     }
 

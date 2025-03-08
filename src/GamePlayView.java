@@ -1,11 +1,7 @@
-import edu.usu.graphics.Color;
 import edu.usu.graphics.Font;
 import edu.usu.graphics.Graphics2D;
-import org.joml.Vector3f;
-
-import java.util.ArrayList;
-
-import static org.lwjgl.glfw.GLFW.*;
+import utils.GameScores;
+import utils.Serializer;
 
 public class GamePlayView extends GameStateView {
 
@@ -14,6 +10,13 @@ public class GamePlayView extends GameStateView {
     private Font font;
 
     private GameModel gameModel;
+    public Serializer serializer;
+    public GameScores gameScores;
+
+    public GamePlayView(Serializer serializer, GameScores gameScores){
+        this.serializer = serializer;
+        this.gameScores = gameScores;
+    }
 
 
     @Override
@@ -33,7 +36,7 @@ public class GamePlayView extends GameStateView {
 
     @Override
     public void initializeSession() {
-        gameModel = new GameModel();
+        gameModel = new GameModel(serializer, gameScores);
         gameModel.initialize(graphics);
         nextGameState = GameStateEnum.GamePlay;
     }

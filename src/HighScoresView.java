@@ -1,10 +1,10 @@
-import ecs.Entities.Entity;
-import ecs.Systems.Pause;
 import edu.usu.graphics.Color;
 import edu.usu.graphics.Font;
 import edu.usu.graphics.Graphics2D;
+import utils.GameScores;
+import utils.Serializer;
 
-import java.util.List;
+import java.util.Collections;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -61,7 +61,8 @@ public class HighScoresView extends GameStateView {
         graphics.drawTextByHeight(font, message, 0.0f - width / 2, top, height, Color.YELLOW);
         top += 0.3F;
         this.serializer.loadGameState(this.gameScores);
-        for(Integer score: this.gameScores.scores){
+        this.gameScores.scores.sort(Collections.reverseOrder());
+        for(Integer score: this.gameScores.scores.subList(0, Math.min(5, this.gameScores.scores.size()))){
             graphics.drawTextByHeight(font, "Here is a score: " + score, 0.0f - width / 2, top, height, Color.YELLOW);
             System.out.println();
             top += 0.1F;
