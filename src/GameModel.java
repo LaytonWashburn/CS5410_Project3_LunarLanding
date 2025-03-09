@@ -7,6 +7,7 @@ import edu.usu.audio.Sound;
 import edu.usu.audio.SoundManager;
 import edu.usu.graphics.*;
 import utils.GameScores;
+import utils.IReturn;
 import utils.Serializer;
 
 import java.util.ArrayList;
@@ -67,9 +68,12 @@ public class GameModel {
     public Serializer serializer;
     public GameScores gameScores;
 
-    public GameModel(Serializer serializer, GameScores gameScores){
+    private final IReturn IpauseGame;
+
+    public GameModel(Serializer serializer, GameScores gameScores, IReturn IpauseGame){
         this.serializer = serializer;
         this.gameScores = gameScores;
+        this.IpauseGame = IpauseGame;
     }
 
     public void initialize(Graphics2D graphics) {
@@ -110,7 +114,7 @@ public class GameModel {
             // DO SOMETHING
             removeEntity(entity);
             keyBoardPause = false;
-        });
+        }, this.IpauseGame);
 
         initializeTerrain();
         initializeSpaceShip(texSpaceShip);

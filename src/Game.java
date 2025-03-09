@@ -22,6 +22,7 @@ public class Game {
         this.gameScores = new GameScores();
     }
 
+
     public void initialize() {
 
         serializer = new Serializer();

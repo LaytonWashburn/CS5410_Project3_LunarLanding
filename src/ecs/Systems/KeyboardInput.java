@@ -49,15 +49,13 @@ public class KeyboardInput extends System {
                     sounds.playThrust();
                 }
 
-                else if (glfwGetKey(window, input.lookup.get(States.PAUSE)) == GLFW_PRESS) {
-                    java.lang.System.out.println("ESCAPE WAS HIT");
-                    fireLambda = true;
-                }
-
                 else {
                     rotatable.rotating = States.None;
                     moving.moving = States.None;
                 }
+            }
+            if (glfwGetKey(window, input.lookup.get(States.PAUSE)) == GLFW_PRESS) {
+                fireLambda = true;
             }
         }
 

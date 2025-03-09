@@ -36,7 +36,11 @@ public class GamePlayView extends GameStateView {
 
     @Override
     public void initializeSession() {
-        gameModel = new GameModel(serializer, gameScores);
+
+        gameModel = new GameModel(serializer, gameScores, () -> {
+            nextGameState = GameStateEnum.MainMenu;
+        });
+
         gameModel.initialize(graphics);
         nextGameState = GameStateEnum.GamePlay;
     }
